@@ -1,26 +1,38 @@
 <template>
     <div class="todo">
         <h1 class="title">Checklist</h1>
-        <!-- <ui-tabs type="text">
-            <ui-tab title="Pending">pending content</ui-tab>
-            <ui-tab title="Completed">completed content</ui-tab>
-        </ui-tabs> -->
-        <ul class="tasks">
-            <li v-for="task in tasks">
-                <label>
-                    <ui-checkbox type="checkbox" v-model="task.complete"
-                        class="ui_checkbox" />
-                    <!-- <transition name="fade"> -->
-                        <span class="task_name" :class="{complete : task.complete}">
-                            {{task.name}}
-                        </span>
-                    <!-- </transition> -->
-                </label>
-            </li>
-        </ul>
+        <ui-tabs type="text">
+            <ui-tab title="Pending">
+                <ul class="tasks">
+                    <li v-for="task in tasks">
+                        <label>
+                            <ui-checkbox type="checkbox" v-model="task.complete"
+                                class="ui_checkbox" />
+                                <span class="task_name" :class="{complete : task.complete}">
+                                    {{task.name}}
+                                </span>
+                        </label>
+                    </li>
+                </ul>
+            </ui-tab>
+            <ui-tab title="Completed">
+                <ul class="tasks">
+                    <li v-for="task in tasks" v-if="task.complete">
+                        <label>
+                            <ui-checkbox type="checkbox" v-model="task.complete"
+                                class="ui_checkbox" />
+                                <span class="task_name" :class="{complete : task.complete}">
+                                    {{task.name}}
+                                </span>
+                        </label>
+                    </li>
+                </ul>
+            </ui-tab>
+        </ui-tabs>
+        
         <div>
-                <ui-textbox placeholder="e.g. 'read vue.js guide'"
-                    id="ui_textbox" v-model="newTaskName"></ui-textbox>
+            <ui-textbox placeholder="e.g. 'read vue.js guide'"
+                id="ui_textbox" v-model="newTaskName"></ui-textbox>
             <ui-button color="primary" @click="addTask" icon="add"
                 class="ui_button">
                 Add
@@ -41,7 +53,7 @@
                     {name : 'put "Add" button in one line with input', complete : true},
                     {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
                     {name : 'when task is complete cross it out', complete : true},
-                    {name : 'split tasks into "pending" and "complete" tabs with <ui-tabs>', complete : false},
+                    {name : 'split tasks into "pending" and "complete" tabs with <ui-tabs>', complete : true},
                     {name : 'don\'t allow to add empty tasks', complete : true},
                     {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
                     {name : 'extract list item into a separate vue.js component', complete : false},
