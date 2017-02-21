@@ -7,21 +7,23 @@
                     <li v-for="task in tasks" v-if="!task.complete">
                         <label>
                             <ui-checkbox type="checkbox" v-model="task.complete"
-                                class="ui_checkbox" />
-                                <span class="task_name" :class="{complete : task.complete}">
+                                class="ui_checkbox" @focus="changeStyle" />
+                                <span class="task_name"
+                                    :class="{complete : task.complete}">
                                     {{task.name}}
                                 </span>
                         </label>
                     </li>
                 </ul>
             </ui-tab>
-            <ui-tab title="Completed">
+            <ui-tab title="Completed" id="completed">
                 <ul class="tasks">
                     <li v-for="task in tasks" v-if="task.complete">
                         <label>
                             <ui-checkbox type="checkbox" v-model="task.complete"
                                 class="ui_checkbox" />
-                                <span class="task_name" :class="{complete : task.complete}">
+                                <span class="task_name"
+                                    :class="{complete : task.complete}">
                                     {{task.name}}
                                 </span>
                         </label>
@@ -64,11 +66,22 @@
         },
 
         methods : {
-            addTask() {
+            addTask () {
                 if (this.newTaskName != '') {
                     this.tasks.push({name : this.newTaskName, complete : false});
                 }
                 this.newTaskName = '';
+            },
+            changeStyle() {
+                var text = document.getElementsByClassName('ui-tab-header-item__text')[1];
+                setTimeout(increase, 100);
+                function increase() {
+                    text.style.fontSize = '16px';
+                }
+                setTimeout(decrease, 250);
+                function decrease() {
+                    text.style.fontSize = '14px';
+                }
             }
         }
     };
@@ -110,12 +123,5 @@
             margin-left: 10px;
             float: right;
         }
-        /* .fade-enter-active {
-            transition: opacity .5s;
-        }
-        .fade-enter, .fade-leave-active {
-            opacity: 0;
-            transform: translateY(20px);
-        } */
     }
 </style>
