@@ -4,7 +4,7 @@
         <ui-tabs type="text">
             <ui-tab title="Pending">
                 <ul class="tasks">
-                    <li v-for="task in tasks">
+                    <li v-for="task in tasks" v-if="!task.complete">
                         <label>
                             <ui-checkbox type="checkbox" v-model="task.complete"
                                 class="ui_checkbox" />
