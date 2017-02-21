@@ -10,15 +10,17 @@
                 <label>
                     <ui-checkbox type="checkbox" v-model="task.complete"
                         class="ui_checkbox" />
-                    <span class="task_name" :class="{complete : task.complete}">
-                        {{task.name}}
-                    </span>
+                    <!-- <transition name="fade"> -->
+                        <span class="task_name" :class="{complete : task.complete}">
+                            {{task.name}}
+                        </span>
+                    <!-- </transition> -->
                 </label>
             </li>
         </ul>
         <div>
-            <ui-textbox placeholder="e.g. 'read vue.js guide'"
-                id="ui_textbox" v-model="newTaskName"></ui-textbox>
+                <ui-textbox placeholder="e.g. 'read vue.js guide'"
+                    id="ui_textbox" v-model="newTaskName"></ui-textbox>
             <ui-button color="primary" @click="addTask" icon="add"
                 class="ui_button">
                 Add
@@ -50,7 +52,7 @@
         },
 
         methods : {
-            addTask () {
+            addTask() {
                 if (this.newTaskName != '') {
                     this.tasks.push({name : this.newTaskName, complete : false});
                 }
@@ -75,7 +77,7 @@
         .tasks {
             list-style: none;
             padding: 0;
-            max-height: 336px;
+            max-height: 356px;
             overflow-y: auto;
         }
         .ui_checkbox {
@@ -93,7 +95,15 @@
             width: 70%;
         }
         .ui_button {
-            margin-left: 20px;
+            margin-left: 10px;
+            float: right;
         }
+        /* .fade-enter-active {
+            transition: opacity .5s;
+        }
+        .fade-enter, .fade-leave-active {
+            opacity: 0;
+            transform: translateY(20px);
+        } */
     }
 </style>
