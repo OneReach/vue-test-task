@@ -17,6 +17,7 @@ Vue.use(VeeValidate);
 new Vue({
   el         : '#app',
   router,
+  Firebase,
   template   : '<App/>',
   components : {App}
 });

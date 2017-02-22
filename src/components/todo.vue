@@ -12,7 +12,7 @@
               <ul class="tasks">
                   <li v-for="task in tasks">
                       <label @click='markTask' v-show="!task.complete" class="task-label">
-                          <ui-checkbox  v-model="task.complete" class="task__checkbox">{{task.name}}</ui-checkbox>
+                          <ui-checkbox v-model="task.complete" class="task__checkbox">{{task.name}}</ui-checkbox>
                       </label>
                   </li>
               </ul>
@@ -57,7 +57,7 @@
           {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
           {name : 'extract list item into a separate vue.js component', complete : false},
           {name : 'persist tasks list in a local storage', complete : false},
-          {name : 'add animation on task completion', complete : false}
+          {name : 'add animation on task completion', complete : true}
         ]
       }
     },
@@ -70,7 +70,16 @@
             complete: false
           }
         );
-        this.newTaskName = null;
+        this.newTaskName = '';
+        let animateTab = document.querySelector('.ui-tab-header-item__text');
+        if (animateTab.style.animation == 'bubbleTab 0.5s') {
+          return;
+        } else {
+          animateTab.style.animation = 'bubbleTab 0.5s';
+          setTimeout(() => {
+            animateTab.style.animation = '';
+          }, 500);
+        }
       },
       validateBeforeSubmit() {
         this.$validator.validateAll().then(
@@ -83,26 +92,42 @@
         );
       },
       markTask() {
-
-      }
-    },
-    // Normal way to filter lists (doen't work because of keen-ui or because i'm stupid)
-    /*computed: {
-      pendingList() {
-        return this.tasks.filter(task => {
-          return !task.complete;
-        })
+        this.animationTab();
+        console.log(localStorage);
       },
-      completedList() {
-        return this.tasks.filter(task => {
-          return task.complete;
-        })
+      animationTab() {
+        let animateTab = document.querySelector('[tabindex="-1"]').querySelector('.ui-tab-header-item__text');
+        if (animateTab.style.animation == 'bubbleTab 0.5s') {
+          return;
+        } else {
+          animateTab.style.animation = 'bubbleTab 0.5s';
+          setTimeout(() => {
+            animateTab.style.animation = '';
+          }, 500);
+        }
       }
-    }*/
+    }
 };
 </script>
 
 <style scoped lang="scss">
+  @keyframes bubbleTab {
+    0% {
+      transform: rotate(0) scale(1);
+    }
+    25% {
+      transform: rotate(-4deg) scale(0.9);
+    }
+    55% {
+      transform: rotate(4deg) scale(0.9);
+    }
+    75% {
+      transform: rotate(-2deg) scale(1.2);
+    }
+    100% {
+      transform: rotate(0) scale(1);
+    }
+  }
   .todo {
     margin: auto;
     width: 400px;
@@ -144,9 +169,7 @@
     .crossed {
       text-decoration: line-through;
     }
-    .complete {
-      background: red;
-    }
+
   }
   @media (max-width: 400px) {
     .todo {
