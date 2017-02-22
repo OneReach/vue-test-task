@@ -55,7 +55,7 @@
                     {name : 'put "Add" button in one line with input', complete : true},
                     {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
                     {name : 'when task is complete cross it out', complete : true},
-                    {name : 'split tasks into "pending" and "complete" tabs with <ui-tabs>', complete : true},
+                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
                     {name : 'don\'t allow to add empty tasks', complete : true},
                     {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
                     {name : 'extract list item into a separate vue.js component', complete : false},
