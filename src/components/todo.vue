@@ -9,22 +9,10 @@
             text-color="white"
           >
             <ui-tab title="Pending">
-              <ul class="tasks">
-                  <li v-for="task in tasks">
-                      <label @click='markTask' v-show="!task.complete" class="task-label">
-                          <ui-checkbox v-model="task.complete" class="task__checkbox">{{task.name}}</ui-checkbox>
-                      </label>
-                  </li>
-              </ul>
+              <list-item></list-item>
             </ui-tab>
             <ui-tab title="Complete">
-              <ul class="tasks">
-                  <li v-for="task in tasks">
-                      <label @click='markTask' v-show="task.complete" class="task-label crossed">
-                          <ui-checkbox v-model="task.complete" class="task__checkbox">{{task.name}}</ui-checkbox>
-                      </label>
-                  </li>
-              </ul>
+              <list-item></list-item>
             </ui-tab>
           </ui-tabs>
         </div>
@@ -41,7 +29,11 @@
 </template>
 
 <script>
+  import Item from './Item'
   export default {
+    components: {
+      'list-item': Item
+    },
     data () {
       return {
         newTaskName : '',
@@ -93,7 +85,6 @@
       },
       markTask() {
         this.animationTab();
-        console.log(localStorage);
       },
       animationTab() {
         let animateTab = document.querySelector('[tabindex="-1"]').querySelector('.ui-tab-header-item__text');
