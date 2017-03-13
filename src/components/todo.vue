@@ -68,7 +68,8 @@
                 return task;
             },
             getFromStorage(id){
-                return JSON.parse(localStorage[id]);
+                let item = localStorage[id];
+                return item ? JSON.parse(localStorage[id]) : undefined;
             },
             addTask () {
                 if(!this.newTaskName) return;
