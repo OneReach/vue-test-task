@@ -9,7 +9,7 @@ export default new Router({
     {
       path      : '/',
       name      : 'todo',
-      component : todo
+      component : todo,
     }
   ]
 })
