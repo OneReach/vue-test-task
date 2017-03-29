@@ -37,4 +37,62 @@
     html {
         font-size: 100%;
     }
+
+    // styles overwritten
+    .ui-tabs {
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+
+      &__body {
+        flex-grow: 1;
+        border: none !important;
+      }
+    }
+
+    .ui-tabs--text-color-active-primary .ui-tab-header-item.is-active {
+      color: #fff !important;
+      background-color: rgba(0, 0, 0, 0.30);
+      border-radius: 30px;
+    }
+
+    .ui-tabs--indicator-color-primary .ui-tabs__active-tab-indicator {
+      display: none;
+    }
+
+    .ui-tab-header-item {
+      border-radius: 40px;
+      text-transform: none !important;
+    }
+
+    .ui-tab-header-item + .ui-tab-header-item {
+      margin-left: 15px;
+    }
+
+    .ui-tab-header-item {
+      height: 36px !important;
+      padding: 0 15px !important;
+    }
+
+    .ui-checkbox {
+      margin-bottom: 0 !important;
+
+      &__checkmark {
+        margin-right: 12px;
+      }
+    }
+
+    .ui-checkbox__checkmark::before {
+      border: 2px solid rgba(0, 0, 0, 0.10) !important;
+    }
+
+    .ui-textbox__input {
+      width: 240px !important;
+      border-bottom: none !important;
+    }
+
+    .ui-ripple-ink,
+    .ui-button--type-primary.ui-button--color-primary {
+      border-radius: 40px !important;
+    }
 </style>
