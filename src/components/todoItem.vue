@@ -1,25 +1,25 @@
 <template>
-  <li class="item">
+  <li class="todo__item">
     <ui-checkbox
-      :name="task.name"
-      :value="task.complete"
-      :label="task.name"
-      :checked="task.complete"
-      v-on:change="toggleComplete(task)"
+      :value="isComplete"
+      :label="name"
+      @change="toggleComplete"
       />
   </li>
 </template>
 
-<!-- <input
-  type="checkbox"
-  v-model="task.complete"
-  class="ui-checkbox__input"
-  checked="true"
-  />
-  <div class="ui-checkbox__checkmark">
-    <div class="ui-checkbox__focus-ring"></div>
-  </div>
-{{ task.name }} -->
+<!-- <label>
+  <input
+    type="checkbox"
+    v-model="complete"
+    class="ui-checkbox__input"
+    checked="true"
+    />
+    <div class="ui-checkbox__checkmark">
+      <div class="ui-checkbox__focus-ring"></div>
+    </div>
+  {{ name }}
+</label> -->
 <!-- <ui-checkbox
   v-model="task.complete"
   :label="task.name"
@@ -27,17 +27,23 @@
 
 <script>
 export default {
-  props: ['task'],
+  props: ['name', 'complete'],
+  data() {
+    return {
+      isComplete: this.complete
+    }
+  },
   methods: {
-    toggleComplete: function (task) {
-      task.complete = !task.complete
+    toggleComplete: function () {
+      this.isComplete = !this.isComplete
+      console.log(this.isComplete);
     }
   }
 }
 </script>
 
 <style lang="css">
-  .item {
+  .todo__item {
     display: inline-flex;
     margin-bottom: 10px;
     font-weight: bold;

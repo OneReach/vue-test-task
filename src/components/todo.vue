@@ -8,7 +8,8 @@
               <todo-item
                 v-for="(task, index) in pendingTasks"
                 v-bind:key="index"
-                v-bind:task="task"
+                v-bind:name="task.name"
+                v-bind:complete="task.complete"
                 :class="{complete : task.complete}"
               ></todo-item>
             </ul>
@@ -19,7 +20,8 @@
                 <todo-item
                   v-for="(task, index) in completedTasks"
                   v-bind:key="index"
-                  v-bind:task="task"
+                  v-bind:name="task.name"
+                  v-bind:complete="task.complete"
                   :class="{complete : task.complete}"
                 ></todo-item>
             </ul>
