@@ -3,40 +3,17 @@
     <ui-checkbox
       :value="isComplete"
       :label="name"
-      @change="toggleComplete"
-      />
+      @change="$emit('toggle')"
+    />
   </li>
 </template>
-
-<!-- <label>
-  <input
-    type="checkbox"
-    v-model="complete"
-    class="ui-checkbox__input"
-    checked="true"
-    />
-    <div class="ui-checkbox__checkmark">
-      <div class="ui-checkbox__focus-ring"></div>
-    </div>
-  {{ name }}
-</label> -->
-<!-- <ui-checkbox
-  v-model="task.complete"
-  :label="task.name"
-  /> -->
 
 <script>
 export default {
   props: ['name', 'complete'],
-  data() {
+  data: function() {
     return {
       isComplete: this.complete
-    }
-  },
-  methods: {
-    toggleComplete: function () {
-      this.isComplete = !this.isComplete
-      console.log(this.isComplete);
     }
   }
 }
@@ -44,8 +21,9 @@ export default {
 
 <style lang="css">
   .todo__item {
-    display: inline-flex;
+    display: flex;
     margin-bottom: 10px;
     font-weight: bold;
+    transition: all 1s;
   }
 </style>

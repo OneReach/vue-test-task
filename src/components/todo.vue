@@ -4,27 +4,31 @@
         <ui-tabs backgroundColor="clear" indicatorColor="white">
           <!-- Pending -->
           <ui-tab title="Pending">
-            <ul class="todo__tasks">
+            <transition-group tag="ul" name="list" class="todo__tasks">
               <todo-item
-                v-for="(task, index) in pendingTasks"
+                v-for="(task, index) in tasks"
+                v-if="!task.complete"
                 v-bind:key="index"
                 v-bind:name="task.name"
                 v-bind:complete="task.complete"
+                v-on:toggle="task.complete = !task.complete"
                 :class="{complete : task.complete}"
               ></todo-item>
-            </ul>
+            </transition-group>
           </ui-tab>
           <!-- Completed -->
           <ui-tab title="Completed">
-            <ul class="todo__tasks">
+            <transition-group tag="ul" name="list" class="todo__tasks">
                 <todo-item
-                  v-for="(task, index) in completedTasks"
+                  v-for="(task, index) in tasks"
+                  v-if="task.complete"
                   v-bind:key="index"
                   v-bind:name="task.name"
                   v-bind:complete="task.complete"
+                  v-on:toggle="task.complete = !task.complete"
                   :class="{complete : task.complete}"
                 ></todo-item>
-            </ul>
+            </transition-group>
           </ui-tab>
         </ui-tabs>
 
@@ -45,54 +49,68 @@
 
 <script>
     import todoItem from './todoItem.vue'
+    
+    const STORAGE_KEY = 'vue-test-task'
+    const taskStorage = {
+      fetch () {
+        var tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+        return tasks;
+      },
+      save (tasks) {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks));
+      }
+    }
 
     export default {
         components: {
           todoItem,
         },
-        data: function () {
-                return {
-                  newTaskName : '',
-                  tasks : [
-                      {name : 'create skeleton of todo', complete : true},
-                      {name : 'add ability to add tasks', complete : true},
-                      {name : 'clear task name after clicking "Add"', complete : true},
-                      {name : 'put "Add" button in one line with input', complete : true},
-                      {name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
-                      {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
-                      {name : 'when task is complete cross it out', complete : true},
-                      {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
-                      {name : 'don\'t allow to add empty tasks', complete : true},
-                      {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
-                      {name : 'extract list item into a separate vue.js component', complete : true},
-                      {name : 'persist tasks list in a local storage', complete : false},
-                      {name : 'add animation on task completion', complete : false},
-                  ]
-                }
+        data () {
+          return {
+            newTaskName : '',
+            tasks : taskStorage.fetch()
+            // [
+            //     {name : 'create skeleton of todo', complete : true},
+            //     {name : 'add ability to add tasks', complete : true},
+            //     {name : 'clear task name after clicking "Add"', complete : true},
+            //     {name : 'put "Add" button in one line with input', complete : true},
+            //     {name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
+            //     {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
+            //     {name : 'when task is complete cross it out', complete : true},
+            //     {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
+            //     {name : 'don\'t allow to add empty tasks', complete : true},
+            //     {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
+            //     {name : 'extract list item into a separate vue.js component', complete : true},
+            //     {name : 'persist tasks list in a local storage', complete : true},
+            //     {name : 'add animation on task completion', complete : false},
+            // ]
+          }
+        },
+        watch: {
+          tasks: {
+            handler (tasks) {
+              taskStorage.save(tasks);
+            }
+          }
         },
         computed: {
-            // remove duplication
-            completedTasks: function () {
+            completedTasks () {
               return this.tasks.filter(task => task.complete)
             },
 
-            pendingTasks: function () {
+            pendingTasks () {
               return this.tasks.filter(task => !task.complete)
             }
         },
         methods: {
-            addTask: function () {
+            addTask () {
                 if (this.newTaskName !== '') {
                   this.tasks.push({name : this.newTaskName, complete : false});
 
-                  // if (localStorage) { // if localStorage is supported
-                  //   localStorage.setItem('tasks', this.tasks)
-                  // }
-
                   this.newTaskName = ''
                 }
-            },
-        },
+            }
+        }
     };
 </script>
 
@@ -127,5 +145,19 @@
 
     .complete {
       text-decoration: line-through;
+    }
+
+    // list transitions
+    .list-enter-active, .list-leave-active {
+      transition: 500ms cubic-bezier(.87,-.41,.19,1.44);
+    }
+    .list-enter, .list-leave-to {
+      opacity: 0;
+      transform: translateX(30px);
+    }
+
+    .list-enter {
+      transform: translateX(-100%);
+      opacity: 0;
     }
 </style>

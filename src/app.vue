@@ -38,7 +38,7 @@
         font-size: 100%;
     }
 
-    // styles overwritten
+    // styles overriden
     .ui-tabs {
       flex-grow: 1;
       display: flex;
@@ -48,30 +48,27 @@
         flex-grow: 1;
         border: none !important;
       }
-    }
 
-    .ui-tabs--text-color-active-primary .ui-tab-header-item.is-active {
-      color: #fff !important;
-      background-color: rgba(0, 0, 0, 0.30);
-      border-radius: 30px;
-    }
+      &--text-color-active-primary .ui-tab-header-item.is-active {
+        color: #fff !important;
+        background-color: rgba(0, 0, 0, 0.30);
+        border-radius: 30px;
+      }
 
-    .ui-tabs--indicator-color-primary .ui-tabs__active-tab-indicator {
-      display: none;
+      &--indicator-color-primary .ui-tabs__active-tab-indicator {
+        display: none;
+      }
     }
 
     .ui-tab-header-item {
       border-radius: 40px;
       text-transform: none !important;
-    }
-
-    .ui-tab-header-item + .ui-tab-header-item {
-      margin-left: 15px;
-    }
-
-    .ui-tab-header-item {
       height: 36px !important;
       padding: 0 15px !important;
+
+      & + & {
+        margin-left: 15px;
+      }
     }
 
     .ui-checkbox {
@@ -80,10 +77,18 @@
       &__checkmark {
         margin-right: 12px;
       }
-    }
 
-    .ui-checkbox__checkmark::before {
-      border: 2px solid rgba(0, 0, 0, 0.10) !important;
+      &.is-checked &__checkmark::after {
+        border-color: #111 !important;
+      }
+
+      &__checkmark::before {
+        border: 2px solid rgba(0, 0, 0, 0.10) !important;
+      }
+
+      &--color-primary.is-checked &__checkmark::before {
+        background-color: transparent !important;
+      }
     }
 
     .ui-textbox__input {
