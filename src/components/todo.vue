@@ -49,7 +49,7 @@
 
 <script>
     import todoItem from './todoItem.vue'
-    
+
     const STORAGE_KEY = 'vue-test-task'
     const taskStorage = {
       fetch () {
@@ -148,16 +148,20 @@
     }
 
     // list transitions
-    .list-enter-active, .list-leave-active {
-      transition: 500ms cubic-bezier(.87,-.41,.19,1.44);
-    }
-    .list-enter, .list-leave-to {
-      opacity: 0;
-      transform: translateX(30px);
-    }
+    .list {
+      &-enter-active,
+      &-leave-active {
+        transition: 500ms cubic-bezier(.87,-.41,.19,1.44);
+      }
+      &-enter,
+      &-leave-to {
+        opacity: 0;
+        transform: translateX(30px);
+      }
 
-    .list-enter {
-      transform: translateX(-100%);
-      opacity: 0;
+      &-enter {
+        transform: translateX(-100%);
+        opacity: 0;
+      }
     }
 </style>

@@ -71,6 +71,10 @@
       }
     }
 
+    .ui-button {
+      text-transform: none !important;
+    }
+
     .ui-checkbox {
       margin-bottom: 0 !important;
 
