@@ -78,15 +78,6 @@
             }
           }
         },
-        computed: {
-            completedTasks () {
-              return this.tasks.filter(task => task.complete)
-            },
-
-            pendingTasks () {
-              return this.tasks.filter(task => !task.complete)
-            }
-        },
         methods: {
             addTask () {
                 if (this.newTaskName !== '') {
