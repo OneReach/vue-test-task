@@ -4,20 +4,26 @@
         <ui-tabs fullwidth="true" class="tabs">
             <ui-tab title="Pending">
                 <ul class="tasks">
-                    <item v-for="task in pendingTasks" :class="{complete : task.complete}"
-                          v-on:changeStatus="changeStatus(task)"
-                          v-bind:name="task.name"
-                          v-bind:completed="task.complete">
-                    </item>
+                    <transition-group name="completion">
+                        <item v-for="task in pendingTasks" class="list-item"
+                              v-bind:key="task"
+                              v-on:changeStatus="changeStatus(task)"
+                              v-bind:name="task.name"
+                              v-bind:completed="task.complete">
+                        </item>
+                    </transition-group>
                 </ul>
             </ui-tab>
             <ui-tab title="Completed">
                 <ul class="tasks">
-                    <item v-for="task in completedTasks" :class="{complete : task.complete}"
-                          v-on:changeStatus="changeStatus(task)"
-                          v-bind:name="task.name"
-                          v-bind:completed="task.complete">
-                    </item>
+                    <transition-group name="completion">
+                        <item v-for="task in completedTasks" class="list-item complete"
+                              v-bind:key="task"
+                              v-on:changeStatus="changeStatus(task)"
+                              v-bind:name="task.name"
+                              v-bind:completed="task.complete">
+                        </item>
+                    </transition-group>
                 </ul>
             </ui-tab>
         </ui-tabs>
@@ -75,7 +81,8 @@
                             {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
                             {name : 'extract list item into a separate vue.js component', complete : true},
                             {name : 'persist tasks list in a local storage', complete : true},
-                            {name : 'add animation on task completion', complete : false},
+                            {name : 'add animation on task completion', complete : true},
+                            {name : 'say Hello', complete: false}
                         ];
                 }
             }
@@ -126,6 +133,17 @@
         }
         .tabs {
             height: 75%;
+        }
+        .completion-leave-active {
+            @extend .complete;
+            transition: 1s;
+            opacity: 0.5;
+        }
+        .completion-leave-to {
+            opacity: 0;
+        }
+        .list-item {
+            display: block;
         }
     }
 </style>
