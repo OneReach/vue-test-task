@@ -2,7 +2,7 @@
     <div class="todo">
         <h1 class="title">Checklist</h1>
         <ul class="tasks">
-            <tasks-item v-for="task in tasks" :task="task"></tasks-item>
+            <tasks-item v-for="task in tasks" :task="task" :key="task.id"></tasks-item>
         </ul>
         <div>
             <form class="form-add-new-item" @submit.prevent="addTask" novalidate>
@@ -37,19 +37,19 @@
                 newTaskName: '',
                 newTaskNameTouched: false,
                 tasks: [
-                    {name : 'create skeleton of todo', complete : true},
-                    {name : 'add ability to add tasks', complete : true},
-                    {name : 'clear task name after clicking "Add"', complete : true},
-                    {name : 'put "Add" button in one line with input', complete : true},
-                    {name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
-                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
-                    {name : 'when task is complete cross it out', complete : true},
-                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
-                    {name : 'don\'t allow to add empty tasks', complete : true},
-                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
-                    {name : 'extract list item into a separate vue.js component', complete : true},
-                    {name : 'persist tasks list in a local storage', complete : false},
-                    {name : 'add animation on task completion', complete : false},
+                    {name: 'create skeleton of todo', complete: true, id: 1},
+                    {name: 'add ability to add tasks', complete: true, id: 2},
+                    {name: 'clear task name after clicking "Add"', complete: true, id: 3},
+                    {name: 'put "Add" button in one line with input', complete: true, id: 4},
+                    {name: 'add new task by hitting Enter instead of clicking "Add"', complete: true, id: 5},
+                    {name: 'replace <input> with <ui-checkbox> in tasks list', complete: true, id: 6},
+                    {name: 'when task is complete cross it out', complete: true, id: 7},
+                    {name: 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete: false, id: 8},
+                    {name: 'don\'t allow to add empty tasks', complete: true, id: 9},
+                    {name: 'make list of tasks scrollable, if there\'re are a lot of tasks', complete: true, id: 10},
+                    {name: 'extract list item into a separate vue.js component', complete: true, id: 11},
+                    {name: 'persist tasks list in a local storage', complete: false, id: 12},
+                    {name: 'add animation on task completion', complete: false, id: 13},
                 ]
             }
         },
@@ -59,7 +59,8 @@
                     this.newTaskNameTouched = true;
                     return false;
                 }
-                this.tasks.push({name : this.newTaskName, complete : false});
+                //item ids are crucial for discriminating separate items and helps to avoid bugs
+                this.tasks.push({name: this.newTaskName, complete: false, id: Math.random()});
                 this.newTaskName = '';
                 this.newTaskNameTouched = false;
             }
