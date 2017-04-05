@@ -11,8 +11,8 @@
         </ul>
         <div>
             <form class="form-add-new-item" @submit.prevent="addTask">
-                <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
-                <ui-button color="primary" buttonType="submit" icon="add">Add</ui-button>
+                <ui-textbox class="inp-add-new-item" placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
+                <ui-button class="btn-add-new-item" color="primary" buttonType="submit" icon="add">Add</ui-button>
             </form>
         </div>
     </div>
@@ -27,7 +27,7 @@
                     {name : 'create skeleton of todo', complete : true},
                     {name : 'add ability to add tasks', complete : true},
                     {name : 'clear task name after clicking "Add"', complete : true},
-                    {name : 'put "Add" button in one line with input', complete : false},
+                    {name : 'put "Add" button in one line with input', complete : true},
                     {name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
                     {name : 'replace <input> with <ui-checkbox> in tasks list', complete : false},
                     {name : 'when task is complete cross it out', complete : false},
@@ -68,7 +68,17 @@
         }
 
         .form-add-new-item {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
 
+            .inp-add-new-item {
+                flex-grow: 1;
+            }
+
+            .btn-add-new-item {
+                margin: 0 5px;
+            }
         }
     }
 </style>
