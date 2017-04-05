@@ -12,7 +12,7 @@
         <div>
             <form class="form-add-new-item" @submit.prevent="addTask">
                 <ui-textbox class="inp-add-new-item" placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
-                <ui-button class="btn-add-new-item" color="primary" buttonType="submit" icon="add">Add</ui-button>
+                <ui-button class="btn-rounded btn-add-new-item" color="primary" buttonType="submit" icon="add">Add</ui-button>
             </form>
         </div>
     </div>
