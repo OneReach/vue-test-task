@@ -78,7 +78,7 @@
                     {name: 'make list of tasks scrollable, if there\'re are a lot of tasks', complete: true, id: 10},
                     {name: 'extract list item into a separate vue.js component', complete: true, id: 11},
                     {name: 'persist tasks list in a local storage', complete: true, id: 12},
-                    {name: 'add animation on task completion', complete: false, id: 13},
+                    {name: 'add animation on task completion', complete: true, id: 13},
                     {name: 'smth else?', complete: false, id: 14},
                 ];
             return tasks
