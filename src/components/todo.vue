@@ -30,7 +30,7 @@
             <form class="form-add-new-item" @submit.prevent="addTask" novalidate>
                 <ui-textbox
                     class="inp-add-new-item"
-                    placeholder="e.g. 'read vue.js guide'"
+                    placeholder="Add an item here"
                     required
                     :invalid="newTaskNameTouched && newTaskName.length === 0"
                     @touch="newTaskNameTouched = true"
@@ -41,9 +41,8 @@
                     class="btn-rounded btn-add-new-item"
                     color="primary"
                     buttonType="submit"
-                    icon="add"
                 >
-                    Add
+                    Add item
                 </ui-button>
             </form>
         </div>
