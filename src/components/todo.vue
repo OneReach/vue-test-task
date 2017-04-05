@@ -53,12 +53,19 @@
 <script>
     import tasksItem from "./tasksItem.vue"
 
-    export default {
-        data () {
-            return {
-                newTaskName: '',
-                newTaskNameTouched: false,
-                tasks: [
+    // localStorage persistence
+    const STORAGE_KEY = 'OneReach-task-todo-list-vue.js';
+    const todoStorage = {
+        fetch() {
+            let tasks;
+            try {
+                tasks = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
+            } catch (e) {
+                alert("Could not fetch tasks from todoStorage :(\nTry refreshing the page or contact us to fix it.");
+                tasks = []
+            }
+            if(!tasks.length)
+                tasks = [
                     {name: 'create skeleton of todo', complete: true, id: 1},
                     {name: 'add ability to add tasks', complete: true, id: 2},
                     {name: 'clear task name after clicking "Add"', complete: true, id: 3},
@@ -70,11 +77,36 @@
                     {name: 'don\'t allow to add empty tasks', complete: true, id: 9},
                     {name: 'make list of tasks scrollable, if there\'re are a lot of tasks', complete: true, id: 10},
                     {name: 'extract list item into a separate vue.js component', complete: true, id: 11},
-                    {name: 'persist tasks list in a local storage', complete: false, id: 12},
+                    {name: 'persist tasks list in a local storage', complete: true, id: 12},
                     {name: 'add animation on task completion', complete: false, id: 13},
-                ]
+                    {name: 'smth else?', complete: false, id: 14},
+                ];
+            return tasks
+        },
+        save(tasks) {
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(tasks))
+        }
+    };
+
+    export default {
+        data () {
+            return {
+                newTaskName: '',
+                newTaskNameTouched: false,
+                tasks: todoStorage.fetch(),
             }
         },
+
+        watch: {
+            // watch tasks change for localStorage persistence
+            tasks: {
+                handler: function (items) {
+                    todoStorage.save(items)
+                },
+                deep: true
+            }
+        },
+
         methods : {
             addTask () {
                 if(!this.newTaskName) {
