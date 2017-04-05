@@ -2,13 +2,7 @@
     <div class="todo">
         <h1 class="title">Checklist</h1>
         <ul class="tasks">
-            <li v-for="task in tasks" :class="['task-item', {complete: task.complete}]">
-                <label>
-                    <ui-checkbox v-model="task.complete" >
-                        {{task.name}}
-                    </ui-checkbox>
-                </label>
-            </li>
+            <tasks-item v-for="task in tasks" :task="task"></tasks-item>
         </ul>
         <div>
             <form class="form-add-new-item" @submit.prevent="addTask" novalidate>
@@ -35,6 +29,8 @@
 </template>
 
 <script>
+    import tasksItem from "./tasksItem.vue"
+
     export default {
         data () {
             return {
@@ -51,13 +47,12 @@
                     {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
                     {name : 'don\'t allow to add empty tasks', complete : true},
                     {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
-                    {name : 'extract list item into a separate vue.js component', complete : false},
+                    {name : 'extract list item into a separate vue.js component', complete : true},
                     {name : 'persist tasks list in a local storage', complete : false},
                     {name : 'add animation on task completion', complete : false},
                 ]
             }
         },
-
         methods : {
             addTask () {
                 if(!this.newTaskName) {
@@ -68,6 +63,9 @@
                 this.newTaskName = '';
                 this.newTaskNameTouched = false;
             }
+        },
+        components: {
+            tasksItem
         }
     };
 </script>
@@ -94,12 +92,6 @@
             min-height: 5em;
             max-height: 100%;
             overflow-y: auto;
-
-            .task-item {
-                &.complete {
-                    text-decoration: line-through;
-                }
-            }
         }
 
         .form-add-new-item {
