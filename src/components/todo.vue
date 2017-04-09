@@ -2,8 +2,8 @@
     <div class="todo">
         <h1 class="title">Checklist</h1>
         <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
-                <ui-checkbox v-model="task.complete" :label="task.name" />
+            <li v-for="(task, index) in tasks" :class="{complete : task.complete}">
+                <todo-item :task="task" :taskId="index" v-on:changed="updateTask"></todo-item>
             </li>
         </ul>
         <div class="form">
@@ -14,6 +14,7 @@
 </template>
 
 <script>
+    import TodoItem from './todo-item';
     export default {
         data () {
             return {
@@ -29,11 +30,15 @@
                     {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
                     {name : 'don\'t allow to add empty tasks', complete : true},
                     {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
-                    {name : 'extract list item into a separate vue.js component', complete : false},
+                    {name : 'extract list item into a separate vue.js component', complete : true},
                     {name : 'persist tasks list in a local storage', complete : false},
                     {name : 'add animation on task completion', complete : false},
                 ]
             }
+        },
+
+        components : {
+            'todo-item': TodoItem
         },
 
         methods : {
@@ -42,6 +47,10 @@
                     this.tasks.push({name : this.newTaskName, complete : false});
                     this.newTaskName = '';
                 }
+            },
+
+            updateTask (taskId, task) {
+                this.tasks[taskId] = task;
             }
         }
     };
