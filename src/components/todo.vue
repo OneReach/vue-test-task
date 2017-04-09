@@ -5,16 +5,12 @@
             <ui-tabs type="text">
                 <ui-tab title="pending">
                     <ul class="tasks">
-                        <li v-for="(task, index) in pendingTasks" :class="{complete : task.complete}">
-                            <todo-item :task="task" :taskId="index" v-on:changed="updateTask"></todo-item>
-                        </li>
+                        <todo-item v-for="task in pendingTasks" :task="task" :key="task.id"></todo-item>
                     </ul>
                 </ui-tab>
                 <ui-tab title="complete">
                     <ul class="tasks">
-                        <li v-for="(task, index) in completeTasks" :class="{complete : task.complete}">
-                            <todo-item :task="task" :taskId="index" v-on:changed="updateTask"></todo-item>
-                        </li>
+                        <todo-item v-for="task in completeTasks" :task="task" :key="task.id"></todo-item>
                     </ul>
                 </ui-tab>
             </ui-tabs>
@@ -28,38 +24,22 @@
 
 <script>
     import TodoItem from './todo-item';
+    import uuidV4 from 'uuid/v4';
+
     export default {
         data () {
             return {
                 newTaskName : '',
-                tasks : [
-                    {name : 'create skeleton of todo', complete : true},
-                    {name : 'add ability to add tasks', complete : true},
-                    {name : 'clear task name after clicking "Add"', complete : true},
-                    {name : 'put "Add" button in one line with input', complete : true},
-                    {name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
-                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
-                    {name : 'when task is complete cross it out', complete : true},
-                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
-                    {name : 'don\'t allow to add empty tasks', complete : true},
-                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
-                    {name : 'extract list item into a separate vue.js component', complete : true},
-                    {name : 'persist tasks list in a local storage', complete : false},
-                    {name : 'add animation on task completion', complete : false},
-                ]
+                tasks: this._getTasks()
             }
         },
 
-        computed: {
+        computed : {
             pendingTasks: function () {
-                return this.tasks.filter(function (task) {
-                    return !task.complete;
-                });
+                return this.tasks.filter(task => !task.complete);
             },
             completeTasks: function () {
-                return this.tasks.filter(function (task) {
-                    return task.complete;
-                });
+                return this.tasks.filter(task => task.complete);
             }
         },
 
@@ -70,13 +50,25 @@
         methods : {
             addTask () {
                 if (this.newTaskName.trim() !== '') {
-                    this.tasks.push({name : this.newTaskName, complete : false});
+                    this.tasks.push({id : uuidV4(), name : this.newTaskName, complete : false});
                     this.newTaskName = '';
                 }
             },
 
-            updateTask (taskId, task) {
-                this.tasks[taskId] = task;
+            _getTasks () {
+                try {
+                    return JSON.parse(localStorage.getItem('tasks'));
+                } catch (error) {
+                    return [];
+                }
+            }
+        },
+        watch : {
+            tasks : {
+                handler : function (value) {
+                    localStorage.setItem('tasks', JSON.stringify(value));
+                },
+                deep : true
             }
         }
     };
