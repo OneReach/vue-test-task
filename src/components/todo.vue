@@ -25,7 +25,7 @@
                     {name : 'put "Add" button in one line with input', complete : true},
                     {name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
                     {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
-                    {name : 'when task is complete cross it out', complete : false},
+                    {name : 'when task is complete cross it out', complete : true},
                     {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
                     {name : 'don\'t allow to add empty tasks', complete : false},
                     {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
@@ -60,6 +60,10 @@
         .tasks {
             list-style: none;
             padding: 0;
+
+            .complete {
+                text-decoration: line-through;
+            }
         }
 
         .form {
