@@ -93,10 +93,6 @@
             padding: 0;
             max-height: 75vh;
             overflow: auto;
-
-            .complete {
-                text-decoration: line-through;
-            }
         }
 
         .form {
@@ -106,6 +102,9 @@
                 width: 100%;
                 padding-right: 10px;
             }
+        }
+        .complete {
+            text-decoration: line-through;
         }
     }
 </style>

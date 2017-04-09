@@ -1,11 +1,56 @@
 <template>
-    <li :class="{complete : task.complete}">
-        <ui-checkbox v-model="task.complete" :label="task.name"></ui-checkbox>
-    </li>
+    <transition v-on:leave="leave" v-on:after-leave="afterLeave">
+        <li :class="['todo-item', {complete : task.complete}]">
+            <ui-checkbox v-model="task.complete" :label="task.name"></ui-checkbox>
+        </li>
+    </transition>
 </template>
 
 <script>
     export default {
-        props: ['task']
+        props: ['task'],
+        methods: {
+            leave: function (el, done) {
+                let elClass = this.task.complete ? 'task-state-complete' : 'task-state-incomplete',
+                    labelClass = 'is-checked';
+
+                el.classList.add(elClass);
+                // imitates checked/unchecked checkbox
+                if (this.task.complete) {
+                    el.getElementsByTagName('label')[0].classList.add(labelClass);
+                } else {
+                    el.getElementsByTagName('label')[0].classList.remove(labelClass);
+                }
+                setTimeout(function() {
+                   done();
+                }, 500);
+            },
+            afterLeave: function () {
+                let inactiveTab = document.querySelector('.ui-tab-header-item:not(.is-active)');
+                inactiveTab.classList.add('scale-in');
+
+                inactiveTab.addEventListener('animationend', function () {
+                    inactiveTab.classList.remove('scale-in');
+                });
+            }
+        }
     }
 </script>
+
+<style lang="scss">
+    .task-state-complete {
+        text-decoration: line-through;
+    }
+    .todo .todo-item.task-state-incomplete {
+        text-decoration: none;
+    }
+
+    @keyframes scaleIn {
+        0%   { transform: scale(1); }
+        50%  { transform: scale(1.1); }
+        100% { transform: scale(1); }
+    }
+    .scale-in {
+        animation: scaleIn .5s;
+    }
+</style>
