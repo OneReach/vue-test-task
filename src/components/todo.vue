@@ -24,7 +24,7 @@
                 tasks : [
                     {name : 'create skeleton of todo', complete : true},
                     {name : 'add ability to add tasks', complete : true},
-                    {name : 'clear task name after clicking "Add"', complete : false},
+                    {name : 'clear task name after clicking "Add"', complete : true},
                     {name : 'put "Add" button in one line with input', complete : false},
                     {name : 'add new task by hitting Enter instead of clicking "Add"', complete : false},
                     {name : 'replace <input> with <ui-checkbox> in tasks list', complete : false},
@@ -42,6 +42,7 @@
         methods : {
             addTask () {
                 this.tasks.push({name : this.newTaskName, complete : false});
+                this.newTaskName = '';
             }
         }
     };
