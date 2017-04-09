@@ -22,16 +22,18 @@
                 } else {
                     label.classList.remove(labelClass);
                 }
-                setTimeout(function() {
-                   done();
-                }, 500);
+                label.addEventListener('transitionend', function onAnimationEnd () {
+                    done();
+                    label.removeEventListener('transitionend', onAnimationEnd);
+                });
             },
             afterLeave: function () {
                 let inactiveTab = document.querySelector('.ui-tab-header-item:not(.is-active)');
                 inactiveTab.classList.add('scale-in');
 
-                inactiveTab.addEventListener('animationend', function () {
+                inactiveTab.addEventListener('animationend', function onAnimationEnd () {
                     inactiveTab.classList.remove('scale-in');
+                    inactiveTab.removeEventListener('animationend', onAnimationEnd);
                 });
             }
         }
