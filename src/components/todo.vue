@@ -26,25 +26,27 @@
     import TodoItem from './todo-item';
     import uuidV4 from 'uuid/v4';
 
+    const LOCAL_STORAGE_KEY = 'tasks';
+
     export default {
         data () {
             return {
                 newTaskName : '',
-                tasks: this._getTasks()
+                tasks : this._getTasks()
             }
         },
 
         computed : {
-            pendingTasks: function () {
+            pendingTasks : function () {
                 return this.tasks.filter(task => !task.complete);
             },
-            completeTasks: function () {
+            completeTasks : function () {
                 return this.tasks.filter(task => task.complete);
             }
         },
 
         components : {
-            'todo-item': TodoItem
+            'todo-item' : TodoItem
         },
 
         methods : {
@@ -57,7 +59,7 @@
 
             _getTasks () {
                 try {
-                    return JSON.parse(localStorage.getItem('tasks'));
+                    return JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || [];
                 } catch (error) {
                     return [];
                 }
@@ -66,7 +68,7 @@
         watch : {
             tasks : {
                 handler : function (value) {
-                    localStorage.setItem('tasks', JSON.stringify(value));
+                    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value));
                 },
                 deep : true
             }
@@ -97,11 +99,6 @@
 
         .form {
             display: flex;
-
-            .ui-textbox {
-                width: 100%;
-                padding-right: 10px;
-            }
         }
         .complete {
             text-decoration: line-through;

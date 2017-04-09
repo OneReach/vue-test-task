@@ -50,6 +50,10 @@
         .ui-tabs__active-tab-indicator {
             display: none;
         }
+        .ui-textbox {
+            width: 100%;
+            padding-right: 10px;
+        }
     }
 
     // Keen UI reset
