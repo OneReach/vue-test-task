@@ -1,5 +1,5 @@
 <template>
-    <transition v-on:leave="leave" v-on:after-leave="afterLeave">
+    <transition @leave="leave" @after-leave="afterLeave">
         <li :class="['todo-item', {complete : task.complete}]">
             <ui-checkbox v-model="task.complete" :label="task.name"></ui-checkbox>
         </li>
@@ -12,14 +12,15 @@
         methods: {
             leave: function (el, done) {
                 let elClass = this.task.complete ? 'task-state-complete' : 'task-state-incomplete',
+                    label = el.getElementsByTagName('label')[0],
                     labelClass = 'is-checked';
 
                 el.classList.add(elClass);
                 // imitates checked/unchecked checkbox
                 if (this.task.complete) {
-                    el.getElementsByTagName('label')[0].classList.add(labelClass);
+                    label.classList.add(labelClass);
                 } else {
-                    el.getElementsByTagName('label')[0].classList.remove(labelClass);
+                    label.classList.remove(labelClass);
                 }
                 setTimeout(function() {
                    done();

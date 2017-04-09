@@ -3,12 +3,12 @@
         <h1 class="title">Checklist</h1>
         <div class="list">
             <ui-tabs type="text">
-                <ui-tab title="pending">
+                <ui-tab title="Pending">
                     <ul class="tasks">
                         <todo-item v-for="task in pendingTasks" :task="task" :key="task.id"></todo-item>
                     </ul>
                 </ui-tab>
-                <ui-tab title="complete">
+                <ui-tab title="Completed">
                     <ul class="tasks">
                         <todo-item v-for="task in completeTasks" :task="task" :key="task.id"></todo-item>
                     </ul>
@@ -16,8 +16,8 @@
             </ui-tabs>
         </div>
         <div class="form">
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName" @keydown-enter="addTask"></ui-textbox>
-            <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
+            <ui-textbox :autofocus="true" placeholder="Add an item here" v-model="newTaskName" @keydown-enter="addTask"></ui-textbox>
+            <ui-button color="primary" @click="addTask">Add item</ui-button>
         </div>
     </div>
 </template>
@@ -91,7 +91,7 @@
         .tasks {
             list-style: none;
             padding: 0;
-            max-height: 75vh;
+            max-height: 50vh;
             overflow: auto;
         }
 
