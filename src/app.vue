@@ -37,4 +37,8 @@
     html {
         font-size: 100%;
     }
+
+    .ui-tabs__body {
+        height: calc(100% - 48px);
+    }
 </style>

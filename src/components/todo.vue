@@ -1,48 +1,81 @@
 <template>
     <div class="todo">
-        <h1 class="title">Checklist</h1>
-        <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
-                <label>
-                    <input type="checkbox" v-model="task.complete" />
-                    {{task.name}}
-                </label>
-            </li>
-        </ul>
-        <div>
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
-            <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
+        <h1 class="todo__title">Checklist</h1>
+        <ui-tabs class="todo__tabs" type="text">
+            <ui-tab title="Pending">
+                <ul class="todo__tasks">
+                    <item v-for="task in tasks" :type="'pending'" :task="task" :key="task.id"></item>
+                </ul>
+            </ui-tab>
+            <ui-tab title="Completed">
+                <ul class="todo__tasks">
+                    <item v-for="task in tasks" :type="'completed'" :task="task" :key="task.id"></item>
+                </ul>
+            </ui-tab>
+        </ui-tabs>
+        <div class="controls">
+            <ui-textbox class="controls__input" placeholder="Add an item here"
+                        v-model="newTaskName" v-on:keydown.13="addTask()"></ui-textbox>
+            <ui-button class="controls__button" color="primary" @click="addTask">
+                Add item
+            </ui-button>
         </div>
     </div>
 </template>
 
 <script>
+    import item from "./item.vue"
+
     export default {
         data () {
+            let tasks = JSON.parse(window.localStorage.getItem('tasks'));
+            if (!tasks) {
+                tasks = [
+                    {name: 'create skeleton of todo', complete: true, id: 1},
+                    {name: 'add ability to add tasks', complete: true, id: 2},
+                    {name: 'clear task name after clicking "Add"', complete: true, id: 3},
+                    {name: 'put "Add" button in one line with input', complete: true, id: 4},
+                    {name: 'add new task by hitting Enter instead of clicking "Add"', complete: true, id: 5},
+                    {name: 'replace <input> with <ui-checkbox> in tasks items.vue', complete: true, id: 6},
+                    {name: 'when task is complete cross it out', complete: true, id: 7},
+                    {
+                        name: 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>',
+                        complete: true,
+                        id: 8
+                    },
+                    {name: 'don\'t allow to add empty tasks', complete: true, id: 9},
+                    {name: 'make items.vue of tasks scrollable, if there\'re are a lot of tasks', complete: true,
+                        id: 10},
+                    {name: 'extract items.vue item into a separate vue.js component', complete: true, id: 11},
+                    {name: 'persist tasks items.vue in a local storage', complete: true, id: 12},
+                    {name: 'add animation on task completion', complete: true, id: 13},
+                ];
+                window.localStorage.setItem('tasks', JSON.stringify(tasks));
+            }
+
             return {
                 newTaskName : '',
-                tasks : [
-                    {name : 'create skeleton of todo', complete : true},
-                    {name : 'add ability to add tasks', complete : true},
-                    {name : 'clear task name after clicking "Add"', complete : false},
-                    {name : 'put "Add" button in one line with input', complete : false},
-                    {name : 'add new task by hitting Enter instead of clicking "Add"', complete : false},
-                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : false},
-                    {name : 'when task is complete cross it out', complete : false},
-                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
-                    {name : 'don\'t allow to add empty tasks', complete : false},
-                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
-                    {name : 'extract list item into a separate vue.js component', complete : false},
-                    {name : 'persist tasks list in a local storage', complete : false},
-                    {name : 'add animation on task completion', complete : false},
-                ]
+                tasks
             }
         },
-
+        watch: {
+            tasks: {
+                handler: function(tasks) {
+                    localStorage.setItem("tasks", JSON.stringify(tasks))
+                },
+                deep: true
+            }
+        },
         methods : {
             addTask () {
-                this.tasks.push({name : this.newTaskName, complete : false});
+              if (this.newTaskName) {
+                  this.tasks.push({name : this.newTaskName, complete : false});
+                  this.newTaskName = '';
+              }
             }
+        },
+        components: {
+            item
         }
     };
 </script>
@@ -54,14 +87,58 @@
         padding: 20px;
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
+        width: 600px;
+        height: 650px;
 
-        .title {
+        &__title {
             margin-top: 0;
         }
 
-        .tasks {
+        &__tabs {
+            height: calc(100% - 44px - 40px - 48px);
+        }
+
+        &__tasks {
             list-style: none;
             padding: 0;
+            max-height: 422px;
+            padding-right: 10px;
+            overflow-y: scroll;
+        }
+
+        &__task {
+            width: 100%;
+            display: block;
+        }
+
+        &__label {
+            flex: 0 0 auto;
+            display: flex;
+            flex-flow: row nowrap;
+        }
+
+        &__check {
+            margin-right: 10px;
+        }
+
+        &__text {
+            font-weight: 500;
+            &--completed {
+                text-decoration: line-through;
+            }
+        }
+    }
+
+    .controls {
+        flex: 0 0 auto;
+        display: flex;
+        flex-flow: row nowrap;
+        &__input {
+            flex-grow: 1;
+            flex-basis: 0;
+        }
+        &__button {
+            margin-left: 20px;
         }
     }
 </style>
