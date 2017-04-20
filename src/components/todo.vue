@@ -1,48 +1,90 @@
 <template>
     <div class="todo">
         <h1 class="title">Checklist</h1>
-        <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
-                <label>
-                    <input type="checkbox" v-model="task.complete" />
-                    {{task.name}}
-                </label>
-            </li>
-        </ul>
+        <div class="wrapper">
+            <ui-tabs type="text">
+                <ui-tab title="Pending" class="tab-width">
+                    <pending :pendingTasks="pendingTasks"></pending>
+                </ui-tab>
+                <ui-tab title="Completed" class="tab-width">
+                    <completed :completedTasks="completedTasks"></completed>
+                </ui-tab>
+            </ui-tabs>
+        </div>
         <div>
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
-            <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
+            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName" @keydown-enter="addTask"></ui-textbox>
+            <ui-button color="primary" @click="addTask">Add item</ui-button>
         </div>
     </div>
 </template>
 
 <script>
+    import completed from './completed'
+    import pending from './pending'
+
     export default {
         data () {
             return {
-                newTaskName : '',
-                tasks : [
-                    {name : 'create skeleton of todo', complete : true},
-                    {name : 'add ability to add tasks', complete : true},
-                    {name : 'clear task name after clicking "Add"', complete : false},
-                    {name : 'put "Add" button in one line with input', complete : false},
-                    {name : 'add new task by hitting Enter instead of clicking "Add"', complete : false},
-                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : false},
-                    {name : 'when task is complete cross it out', complete : false},
-                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
-                    {name : 'don\'t allow to add empty tasks', complete : false},
-                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
-                    {name : 'extract list item into a separate vue.js component', complete : false},
-                    {name : 'persist tasks list in a local storage', complete : false},
-                    {name : 'add animation on task completion', complete : false},
+                newTaskName: '',
+                tasks: [
+                    {name: 'create skeleton of todo', complete: true},
+                    {name: 'add ability to add tasks', complete: true},
+                    {name: 'clear task name after clicking "Add"', complete: true},
+                    {name: 'put "Add" button in one line with input', complete: true},
+                    {name: 'add new task by hitting Enter instead of clicking "Add"', complete: true},
+                    {name: 'replace <input> with <ui-checkbox> in tasks list', complete: true},
+                    {name: 'when task is complete cross it out', complete: true},
+                    {
+                        name: 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>',
+                        complete: true
+                    },
+                    {name: 'don\'t allow to add empty tasks', complete: true},
+                    {name: 'make list of tasks scrollable, if there\'re are a lot of tasks', complete: true},
+                    {name: 'extract list item into a separate vue.js component', complete: true},
+                    {name: 'persist tasks list in a local storage', complete: true},
+                    {name: 'add animation on task completion', complete: true},
+                    {name: 'check it', complete: false}
                 ]
             }
         },
-
-        methods : {
+        methods: {
             addTask () {
-                this.tasks.push({name : this.newTaskName, complete : false});
+                if (this.newTaskName.trim() === '') {
+                    this.newTaskName = '';
+                }
+                else {
+                    this.tasks.push({name: this.newTaskName, complete: false});
+                    this.newTaskName = '';
+                }
             }
+        },
+        computed: {
+            pendingTasks () {
+                return this.tasks.filter((task) => !task.complete);
+            },
+            completedTasks () {
+                return this.tasks.filter((task) => task.complete);
+            },
+            storage () {
+                return JSON.stringify(this.pendingTasks.concat(this.completedTasks));
+            }
+        },
+        watch: {
+            storage: {
+                handler: function (tasks) {
+                    localStorage.setItem('tasks', tasks);
+                },
+                deep: true
+            }
+        },
+        created () {
+            if (localStorage.getItem('tasks') !== null) {
+                this.tasks = JSON.parse(localStorage.getItem('tasks'));
+            }
+        },
+        components: {
+            pending,
+            completed
         }
     };
 </script>
@@ -55,13 +97,32 @@
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
 
+        position: relative;
+
+        .wrapper {
+            height: 500px;
+            overflow-y: auto;
+
+            .tab-width {
+                width: 600px;
+
+                .tasks {
+                    list-style: none;
+                    padding: 0;
+                }
+            }
+        }
+
         .title {
             margin-top: 0;
         }
 
-        .tasks {
-            list-style: none;
-            padding: 0;
+        .ui-button {
+            position: relative;
+            top: -55px;
+            left: 80%;
+            border-radius: 20px;
+            text-transform: none;
         }
     }
 </style>
