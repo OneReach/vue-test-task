@@ -34,7 +34,7 @@ export default {
   data () {
     return {
       newTaskName : '',
-      tasks : [ {name : '', complete : false} ]
+      tasks : [ ]
     }
   },
 
@@ -49,10 +49,12 @@ export default {
 
   mounted () {
     this.tasks=this.loadObject("tasks"); //on load page we load task objects to memory
+    this.tasks = []; //init tasks object
   },
 
   methods : {
     addTask () {
+      //if (!this.tasks) this.tasks = []; //check for object valid
       if (!this.newTaskName) return;
       this.tasks.push({name : this.newTaskName, complete : false});
       this.newTaskName='';
