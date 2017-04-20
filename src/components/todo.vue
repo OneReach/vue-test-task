@@ -49,7 +49,7 @@ export default {
 
   mounted () {
     this.tasks=this.loadObject("tasks"); //on load page we load task objects to memory
-    this.tasks = []; //init tasks object
+    if (!this.tasks) this.tasks = []; //if null, init tasks object 
   },
 
   methods : {
