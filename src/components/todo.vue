@@ -6,6 +6,9 @@
           <ui-tab title="Pending">
             <ul class="tasks"
               :class="{ 'oversize': filtered(tasks, false).length > maxSize }">
+                <span v-if="filtered(tasks, false).length == 0">
+                  You're finished all tasks!
+                </span>
                 <li v-for="task in filtered(tasks, false)" v-if="!task.complete">
                     <Item :task="task" @change="updateTask" />
                 </li>
@@ -69,9 +72,9 @@
                     {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
                     {name : 'don\'t allow to add empty tasks', complete : true},
                     {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
-                    { name : 'extract list item into a separate vue.js component', complete : true},
-                    { name : 'persist tasks list in a local storage', complete : true},
-                    {name : 'add animation on task completion', complete : false}
+                    {name : 'extract list item into a separate vue.js component', complete : true},
+                    {name : 'persist tasks list in a local storage', complete : true},
+                    {name : 'add animation on task completion', complete : true}
                 ]
             }
         },

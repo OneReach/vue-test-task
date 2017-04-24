@@ -1,18 +1,24 @@
 <template>
-  <div class='item'>
-    <ui-checkbox class="item-checkbox"
-      v-model="checked"
-      :disabled="checked"
-      :checked="checked"
-      @change="_changeTask"
-    >
-    </ui-checkbox>
-    <span class="item-message"
-      :class="{ 'complete': checked }"
-    >
-      {{ task.name }}
-    </span>
-  </div>
+  <transition
+  name="custom-classes-transition"
+  enter-active-class="animated tada"
+  leave-active-class="animated bounceOutRight"
+  >
+    <div class='item'>
+      <ui-checkbox class="item-checkbox"
+        v-model="checked"
+        :disabled="checked"
+        :checked="checked"
+        @change="_changeTask"
+      >
+      </ui-checkbox>
+      <span class="item-message"
+        :class="{ 'complete': checked }"
+      >
+        {{ task.name }}
+      </span>
+    </div>
+  </transition>
 </template>
 
 <script>
@@ -56,10 +62,6 @@
       .item-checkbox {
         display: inline-block;
         vertical-align: top;
-      }
-
-      .item-message {
-        color: red;
       }
 
       .complete {
