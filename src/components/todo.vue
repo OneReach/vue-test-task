@@ -4,7 +4,8 @@
         <ui-tabs type="text" fullwidth>
 
           <ui-tab title="Pending">
-            <ul class="tasks">
+            <ul class="tasks"
+              :class="{ 'oversize': filtered(tasks, false).length > maxSize }">
                 <li v-for="task in filtered(tasks, false)" v-if="!task.complete">
                     <Item :task="task" @change="updateTask" />
                 </li>
@@ -12,7 +13,8 @@
           </ui-tab>
 
           <ui-tab title="Complete">
-            <ul class="tasks">
+            <ul class="tasks"
+              :class="{ 'oversize': filtered(tasks, true).length > maxSize }">
                 <li v-for="task in filtered(tasks, true)" v-if="task.complete">
                   <Item :task="task" @change="updateTask" />
                 </li>
@@ -54,6 +56,8 @@
                 newTaskName : '',
                 lastTask: {},
                 emptyTask: true,
+                maxSize: 8,
+                overSize: false,
                 tasks : [
                     {id: 0, name : 'create skeleton of todo', complete : true},
                     {id: 1, name : 'add ability to add tasks', complete : true},
@@ -64,7 +68,7 @@
                     {id: 6, name : 'when task is complete cross it out', complete : true},
                     {id: 7, name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
                     {id: 8, name : 'don\'t allow to add empty tasks', complete : true},
-                    {id: 9, name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
+                    {id: 9, name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
                     {id: 10, name : 'extract list item into a separate vue.js component', complete : true},
                     {id: 11, name : 'persist tasks list in a local this.db', complete : false},
                     {id: 12, name : 'add animation on task completion', complete : false}
@@ -144,8 +148,11 @@
               list-style: none;
               height: 270px;
               max-height: 270px;
-              overflow-y: scroll;
               padding: 0;
+          }
+
+          .oversize {
+            overflow-y: scroll;
           }
 
         .ui-textbox {
