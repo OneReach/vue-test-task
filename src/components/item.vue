@@ -3,6 +3,7 @@
     <ui-checkbox class="item-checkbox"
       v-model="checked"
       :disabled="checked"
+      :checked="checked"
       @change="_changeTask"
     >
     </ui-checkbox>
@@ -15,6 +16,8 @@
 </template>
 
 <script>
+  import storage from 'storage';
+
   export default {
     name: 'item',
     props: ['task'],
@@ -26,15 +29,21 @@
     },
 
     watch: {
-      checked () {
-        return this.task.complete = this.checked;
+      checked (val) {
+        setTimeout(function(a) {
+          this.task.complete = val;
+          this.$emit('change', this.task);
+        }.bind(this), 400);
       }
     },
 
     methods: {
       _changeTask (val) {
         this.checked = val;
-        this.$emit('change', this.task);
+
+        setTimeout(function() {
+          this.checked = !val;
+        }.bind(this), 400);
       }
     }
   }
@@ -56,6 +65,10 @@
       .complete {
         text-decoration: line-through;
         color: grey;
+      }
+
+      .checked {
+        opacity: 0;
       }
   }
 </style>
