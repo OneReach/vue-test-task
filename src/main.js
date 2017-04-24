@@ -7,10 +7,13 @@ import router from './router';
 // import 'material-design-icons/iconfont/material-icons.css';
 
 import KeenUI from 'keen-ui';
+import storage from './storage.js';
+import R from 'ramda';
 import 'keen-ui/dist/keen-ui.css';
 
 Vue.use(KeenUI);
-
+Vue.use(storage);
+Vue.use(R);
 /* eslint-disable no-new */
 new Vue({
   el         : '#app',
