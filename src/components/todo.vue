@@ -1,93 +1,136 @@
 <template>
     <div class="todo">
-        <h1 class="title">Checklist</h1>
+        <h2 class="title">Checklist</h2>
         <ui-tabs type="text" fullwidth>
+
           <ui-tab title="Pending">
             <ul class="tasks">
-                <li v-for="task in filtered(tasks, false)" :class="{complete : task.complete}">
-                    <label>
-                        <ui-checkbox class='ui-checkbox' v-model="task.complete"></ui-checkbox>
-                        <span :class="{crossed : task.complete}">{{task.name}}</span>
-                    </label>
+                <li v-for="task in filtered(tasks, false)" v-if="!task.complete">
+                    <Item :task="task" @change="updateTask" />
                 </li>
             </ul>
           </ui-tab>
+
           <ui-tab title="Complete">
             <ul class="tasks">
-                <li v-for="task in filtered(tasks, true)" :class="{complete : task.complete}">
-                    <label>
-                        <ui-checkbox class='ui-checkbox' v-model="task.complete"></ui-checkbox>
-                        <span :class="{crossed : task.complete}">{{task.name}}</span>
-                    </label>
+                <li v-for="task in filtered(tasks, true)" v-if="task.complete">
+                  <Item :task="task" @change="updateTask" />
                 </li>
             </ul>
           </ui-tab>
+
         </ui-tabs>
         <div>
-            <ui-textbox class="ui-textbox" placeholder="e.g. 'read vue.js guide'" v-model="newTaskName" @input="checkTask" @keydown-enter="addTask"></ui-textbox>
-            <ui-button class='ui-button' color="primary" @click="addTask" icon="add">Add</ui-button>
+            <ui-textbox class="ui-textbox"
+              placeholder="e.g. 'read vue.js guide'"
+              v-model="newTaskName"
+              :invalid="emptyTask"
+              :autofocus="true"
+              error="This field is empty..."
+              @input="checkTask"
+              @keydown-enter="addTask">
+            </ui-textbox>
+
+            <ui-button class='ui-button'
+              color="primary"
+              :disabled="emptyTask"
+              @click="addTask"
+              icon="add">
+            Add
+          </ui-button>
         </div>
     </div>
 </template>
 
 <script>
+    import Item from './item';
+    import storage from 'storage';
+    import R from 'ramda';
+    import { to_json, from_json } from '../utils.js';
+
     export default {
         data () {
             return {
                 newTaskName : '',
+                lastTask: {},
                 emptyTask: true,
                 tasks : [
-                    {name : 'create skeleton of todo', complete : true},
-                    {name : 'add ability to add tasks', complete : true},
-                    {name : 'clear task name after clicking "Add"', complete : true},
-                    {name : 'put "Add" button in one line with input', complete : true},
-                    {name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
-                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
-                    {name : 'when task is complete cross it out', complete : true},
-                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
-                    {name : 'don\'t allow to add empty tasks', complete : true},
-                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
-                    {name : 'extract list item into a separate vue.js component', complete : false},
-                    {name : 'persist tasks list in a local storage', complete : false},
-                    {name : 'add animation on task completion', complete : false},
+                    {id: 0, name : 'create skeleton of todo', complete : true},
+                    {id: 1, name : 'add ability to add tasks', complete : true},
+                    {id: 2, name : 'clear task name after clicking "Add"', complete : true},
+                    {id: 3, name : 'put "Add" button in one line with input', complete : true},
+                    {id: 4, name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
+                    {id: 5, name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
+                    {id: 6, name : 'when task is complete cross it out', complete : true},
+                    {id: 7, name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
+                    {id: 8, name : 'don\'t allow to add empty tasks', complete : true},
+                    {id: 9, name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
+                    {id: 10, name : 'extract list item into a separate vue.js component', complete : true},
+                    {id: 11, name : 'persist tasks list in a local this.db', complete : false},
+                    {id: 12, name : 'add animation on task completion', complete : false}
                 ]
             }
         },
 
+        mounted : function () {
+          R.forEachObjIndexed( (value, key) => {
+            storage.set(value.id, to_json(value));
+          }, this.tasks);
+        },
+
+        watch: {
+          lastTask: function(val) {
+            return from_json(val);
+          },
+          tasks: function(val) {
+            let last = this.tasks.length - 1;
+            storage.set(last, to_json(val[last]));
+          }
+        },
+
         methods : {
+            _u (e) {
+              console.log(e);
+            },
             addTask () {
               if (!this.checkTask()) {
-                this.tasks.push({name : this.newTaskName, complete : false});
-                this.newTaskName = '';
+                this.tasks.push({
+                  id: this.tasks.length,
+                  name : this.newTaskName,
+                  complete : false
+                });
+
+                return this.clearTask();
               } else {
                 return false;
               }
             },
             checkTask () {
-              switch (this.isEmpty()) {
-                case true:
-                  return this.emptyTask = true;
-                break;
-                case false:
-                  return this.emptyTask = false;
-                break;
-              }
+              return this.emptyTask = this.isEmpty()
+            },
+            clearTask () {
+              return this.newTaskName = '';
+            },
+            updateTask (val) {
+              return this.lastTask = to_json(val);
+            },
+            filtered (tasks, bool) {
+              return R.filter( value => value.complete === bool, tasks);
             },
             isEmpty () {
               return this.newTaskName == '';
-            },
-            filtered (tasks, bool) {
-              return tasks.filter( task => task.complete === bool)
             }
-        }
+        },
+
+        components: { Item }
     };
 </script>
 
 <style scoped lang="scss">
     .todo {
         margin: auto;
-        width: 685px;
-        min-height: 399px;
+        width: 700px;
+        min-height: 390px;
         background: #fff;
         padding: 20px;
         border-radius: 5px;
@@ -97,19 +140,13 @@
             margin-top: 0;
         }
 
-        .tasks {
-            list-style: none;
-            padding: 0;
-
-            .ui-checkbox {
-              display: inline-block;
-              vertical-align: top;
-            }
-
-            .crossed {
-              text-decoration: line-through;
-            }
-        }
+          .tasks {
+              list-style: none;
+              height: 270px;
+              max-height: 270px;
+              overflow-y: scroll;
+              padding: 0;
+          }
 
         .ui-textbox {
           display: inline-block;
