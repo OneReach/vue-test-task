@@ -1,0 +1,23 @@
+.tasks {
+  list-style: none;
+  padding: 0;
+  height: 200px;
+  width: 500px;
+  overflow-y: auto;
+  overflow-x: hidden;
+  &__item {
+    &--complete {
+      text-decoration: line-through;
+    }
+  }
+}
+
+.task-complete {
+  &-item {
+    transition: all .4s;
+  }
+  &-leave-to {
+    opacity: 0;
+    transform: translateX(100px);
+  }
+}
