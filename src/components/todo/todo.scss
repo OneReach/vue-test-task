@@ -1,0 +1,22 @@
+.todo {
+  margin: auto;
+  background: #fff;
+  padding: 20px;
+  border-radius: 5px;
+  box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
+
+  .title {
+    margin-top: 0;
+  }
+
+  .new-task {
+    display: flex;
+    &__name {
+      width: 90%;
+      margin-right: 20px;
+    }
+    &__add {
+      width: 10%;
+    }
+  }
+}
