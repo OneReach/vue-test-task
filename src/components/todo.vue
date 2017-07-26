@@ -2,13 +2,13 @@
     <div class="todo">
         <h1 class="title">Checklist</h1>
         <ui-tabs backgroundColor="clear" fullwidth>
-            <ui-tab title="pending">
+            <ui-tab :title="'pending (' + tasks.filter(o => !o.complete).length + ')'">
                 <ul class="tasks tasks--pending">
                     <todo-item v-for="task in tasks" v-if="!task.complete" :task="task" :onCheck="onTaskCheck"></todo-item>
                 </ul>
             </ui-tab>
 
-            <ui-tab title="complete">
+            <ui-tab :title="'complete (' + tasks.filter(o => o.complete).length + ')'">
                 <ul class="tasks tasks--complete">
                     <todo-item v-for="task in tasks" v-if="task.complete" :task="task" :onCheck="onTaskCheck"></todo-item>
                 </ul>
@@ -118,21 +118,19 @@
         }
 
         .todo-item-animation {
-            &-enter-active, &-leave-active {
-                animation: todo-item-animation 0.5s;
-                @keyframes todo-item-animation {
-                    0% {
-                        height: $item-height;
-                    }
-                    100% {
-                        transform: scale(0.8);
-                        opacity: 0;
-                        height: 0;
-                    }
-                }
-            }
-            &-enter, &-leave-to {
-            }
+            &-leave-active {
+                 animation: todo-item-animation 0.5s;
+                 @keyframes todo-item-animation {
+                     0% {
+                         height: $item-height;
+                     }
+                     100% {
+                         transform: scale(0.8);
+                         opacity: 0;
+                         height: 0;
+                     }
+                 }
+             }
         }
     }
 </style>
