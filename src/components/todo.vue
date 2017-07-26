@@ -4,21 +4,13 @@
         <ui-tabs backgroundColor="clear" fullwidth>
             <ui-tab title="pending">
                 <ul class="tasks">
-                    <li v-for="task in tasks" :class="{complete : task.complete}" v-if="!task.complete">
-                        <label>
-                            <ui-checkbox v-model="task.complete" :label="task.name"></ui-checkbox>
-                        </label>
-                    </li>
+                    <todo-item v-for="task in tasks" v-if="!task.complete" :task="task"></todo-item>
                 </ul>
             </ui-tab>
 
             <ui-tab title="complete">
                 <ul class="tasks">
-                    <li v-for="task in tasks" :class="{complete : task.complete}" v-if="task.complete">
-                        <label>
-                            <ui-checkbox v-model="task.complete" :label="task.name"></ui-checkbox>
-                        </label>
-                    </li>
+                    <todo-item v-for="task in tasks" v-if="task.complete" :task="task"></todo-item>
                 </ul>
             </ui-tab>
         </ui-tabs>
@@ -30,6 +22,8 @@
 </template>
 
 <script>
+    import todoItem from './todo-item.vue';
+
     export default {
         data () {
             return {
@@ -45,7 +39,7 @@
                     {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
                     {name : 'don\'t allow to add empty tasks', complete : true},
                     {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
-                    {name : 'extract list item into a separate vue.js component', complete : false},
+                    {name : 'extract list item into a separate vue.js component', complete : true},
                     {name : 'persist tasks list in a local storage', complete : false},
                     {name : 'add animation on task completion', complete : false},
                 ]
@@ -59,6 +53,10 @@
                     this.newTaskName = '';
                 }
             }
+        },
+
+        components : {
+            'todo-item': todoItem
         }
     };
 </script>
