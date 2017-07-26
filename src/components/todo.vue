@@ -9,7 +9,7 @@
                 </label>
             </li>
         </ul>
-        <div>
+        <div class="add-task">
             <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
             <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
         </div>
@@ -25,7 +25,7 @@
                     {name : 'create skeleton of todo', complete : true},
                     {name : 'add ability to add tasks', complete : true},
                     {name : 'clear task name after clicking "Add"', complete : true},
-                    {name : 'put "Add" button in one line with input', complete : false},
+                    {name : 'put "Add" button in one line with input', complete : true},
                     {name : 'add new task by hitting Enter instead of clicking "Add"', complete : false},
                     {name : 'replace <input> with <ui-checkbox> in tasks list', complete : false},
                     {name : 'when task is complete cross it out', complete : false},
@@ -63,6 +63,16 @@
         .tasks {
             list-style: none;
             padding: 0;
+        }
+
+        .add-task {
+          display: flex;
+          align-items: flex-end;
+          .ui-textbox {
+            flex: 1;
+            margin-bottom: 0;
+            margin-right: 10px;
+          }
         }
     }
 </style>
