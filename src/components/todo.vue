@@ -3,14 +3,14 @@
         <h1 class="title">Checklist</h1>
         <ui-tabs backgroundColor="clear" fullwidth>
             <ui-tab title="pending">
-                <ul class="tasks">
-                    <todo-item v-for="task in tasks" v-if="!task.complete" :task="task" :onCheck="updateTask"></todo-item>
+                <ul class="tasks tasks--pending">
+                    <todo-item v-for="task in tasks" v-if="!task.complete" :task="task" :onCheck="onTaskCheck"></todo-item>
                 </ul>
             </ui-tab>
 
             <ui-tab title="complete">
-                <ul class="tasks">
-                    <todo-item v-for="task in tasks" v-if="task.complete" :task="task" :onCheck="updateTask"></todo-item>
+                <ul class="tasks tasks--complete">
+                    <todo-item v-for="task in tasks" v-if="task.complete" :task="task" :onCheck="onTaskCheck"></todo-item>
                 </ul>
             </ui-tab>
         </ui-tabs>
@@ -37,7 +37,7 @@
         {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
         {name : 'extract list item into a separate vue.js component', complete : true},
         {name : 'persist tasks list in a local storage', complete : true},
-        {name : 'add animation on task completion', complete : false},
+        {name : 'add animation on task completion', complete : true},
     ];
 
     export default {
@@ -61,7 +61,7 @@
                 }
             },
 
-            updateTask () {
+            onTaskCheck () {
                 this.writeTasks(this.tasks);
             },
 
@@ -82,6 +82,9 @@
 
 <style scoped lang="scss">
     .todo {
+        $item-height: 1.25rem + 0.5rem; // ui-checkbox height + item margin-bottom
+        $visible-items: 10;
+
         margin: auto;
         background: #fff;
         padding: 20px;
@@ -94,9 +97,6 @@
         }
 
         .tasks {
-            $item-height: 1.25rem + 0.5rem; // ui-checkbox height + item margin-bottom
-            $visible-items: 10;
-
             list-style: none;
             padding: 0;
             overflow: auto;
@@ -114,6 +114,24 @@
                 flex: 1;
                 margin-bottom: 0;
                 margin-right: 10px;
+            }
+        }
+
+        .todo-item-animation {
+            &-enter-active, &-leave-active {
+                animation: todo-item-animation 0.5s;
+                @keyframes todo-item-animation {
+                    0% {
+                        height: $item-height;
+                    }
+                    100% {
+                        transform: scale(0.8);
+                        opacity: 0;
+                        height: 0;
+                    }
+                }
+            }
+            &-enter, &-leave-to {
             }
         }
     }
