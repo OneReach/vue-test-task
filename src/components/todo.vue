@@ -44,7 +44,7 @@
                     {name : 'when task is complete cross it out', complete : true},
                     {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
                     {name : 'don\'t allow to add empty tasks', complete : true},
-                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
+                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
                     {name : 'extract list item into a separate vue.js component', complete : false},
                     {name : 'persist tasks list in a local storage', complete : false},
                     {name : 'add animation on task completion', complete : false},
@@ -77,8 +77,14 @@
         }
 
         .tasks {
+            $item-height: 1.25rem + 0.5rem; // ui-checkbox height + item margin-bottom
+            $visible-items: 10;
+
             list-style: none;
             padding: 0;
+            overflow: auto;
+            max-height: $item-height * $visible-items;
+
             .complete {
                 text-decoration: line-through;
             }
