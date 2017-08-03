@@ -1,22 +1,38 @@
 <template>
     <div class="todo">
         <h1 class="title">Checklist</h1>
-        <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
-                <label>
-                    <input type="checkbox" v-model="task.complete" />
-                    {{task.name}}
-                </label>
-            </li>
-        </ul>
-        <div>
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
-            <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
+
+         <ui-tabs type="text">
+            <ui-tab title="Pending">
+                <tasks-list :tasks="tasks" :completed="false"/>
+            </ui-tab>
+            <ui-tab title="Completed">
+                <tasks-list :tasks="tasks" :completed="true"/>
+            </ui-tab>
+        </ui-tabs>
+
+        <div class="todo__form">
+            <form @submit="addTask">
+                <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
+                <ui-button button-type="submit" color="primary" icon="add">Add</ui-button>
+            </form>
         </div>
     </div>
 </template>
 
 <script>
+    import tasksList from './tasks-list';
+
+    function saveTaskToStorage(task) {
+        const tasksFromStorage = getTasksFromStorage();
+        tasksFromStorage.push(task);
+        localStorage.setItem('tasks', JSON.stringify(tasksFromStorage));
+    }
+
+	function getTasksFromStorage() {
+		return JSON.parse(localStorage.getItem('tasks')) || [];
+	}
+
     export default {
         data () {
             return {
@@ -24,31 +40,52 @@
                 tasks : [
                     {name : 'create skeleton of todo', complete : true},
                     {name : 'add ability to add tasks', complete : true},
-                    {name : 'clear task name after clicking "Add"', complete : false},
-                    {name : 'put "Add" button in one line with input', complete : false},
-                    {name : 'add new task by hitting Enter instead of clicking "Add"', complete : false},
-                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : false},
-                    {name : 'when task is complete cross it out', complete : false},
-                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
-                    {name : 'don\'t allow to add empty tasks', complete : false},
-                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
-                    {name : 'extract list item into a separate vue.js component', complete : false},
-                    {name : 'persist tasks list in a local storage', complete : false},
-                    {name : 'add animation on task completion', complete : false},
+                    {name : 'clear task name after clicking "Add"', complete : true},
+                    {name : 'put "Add" button in one line with input', complete : true},
+                    {name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
+                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
+                    {name : 'when task is complete cross it out', complete : true},
+                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : true},
+                    {name : 'don\'t allow to add empty tasks', complete : true},
+                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
+                    {name : 'extract list item into a separate vue.js component', complete : true},
+                    {name : 'persist tasks list in a local storage', complete : true},
+                    {name : 'add animation on task completion', complete : true},
+                    {name : 'check the test task', complete: false}
                 ]
             }
         },
 
         methods : {
             addTask () {
-                this.tasks.push({name : this.newTaskName, complete : false});
+                const isFilled = this.newTaskName.trim().length > 0;
+
+                if ( isFilled ) {
+                    const task = { name: this.newTaskName, complete: false };
+
+                    this.tasks.push(task);
+                    saveTaskToStorage(task);
+
+                    this.newTaskName = '';
+                }
             }
+        },
+
+        created() {
+            const tasksFromStorage = getTasksFromStorage();
+            this.tasks = this.tasks.concat(tasksFromStorage);
+        },
+
+        components: {
+            'tasks-list': tasksList
         }
     };
 </script>
 
 <style scoped lang="scss">
     .todo {
+        width: 600px;
+        height: 600px;
         margin: auto;
         background: #fff;
         padding: 20px;
@@ -59,9 +96,23 @@
             margin-top: 0;
         }
 
-        .tasks {
-            list-style: none;
-            padding: 0;
+        .todo__form form {
+            display: flex;
+
+            .ui-textbox {
+                width: 100%;
+                margin-bottom: 0;
+                padding-right: 15px;
+            }
         }
+    }
+</style>
+
+<style lang="scss">
+    .todo .ui-tabs__body {
+        height: 388px;
+        overflow: auto;
+        padding-bottom: 0;
+        padding-top: 0;
     }
 </style>
