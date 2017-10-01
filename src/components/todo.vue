@@ -1,16 +1,20 @@
 <template>
     <div class="todo">
         <h1 class="title">Checklist</h1>
+        <div>
+            <ui-button color="default" v-on:click="setPage(false)">Pending</ui-button>
+            <ui-button color="default" v-on:click="setPage(true)">Completed</ui-button>
+        </div>       
         <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
+            <li v-for="task in taskList" :class="{complete : task.complete}">
                 <label>
-                    <input type="checkbox" v-model="task.complete" />
+                    <input type="checkbox" v-model="task.complete" v-on:change="setTaskList()" />
                     {{task.name}}
                 </label>
             </li>
         </ul>
         <div>
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
+            <ui-textbox placeholder="Add an item here" v-model="newTaskName"></ui-textbox>
             <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
         </div>
     </div>
@@ -35,14 +39,30 @@
                     {name : 'extract list item into a separate vue.js component', complete : false},
                     {name : 'persist tasks list in a local storage', complete : false},
                     {name : 'add animation on task completion', complete : false},
-                ]
+                ],
+                selectCompleted: false,
+                taskList: [] 
             }
         },
 
+        created() {
+            this.setTaskList(); 
+        },
+
         methods : {
-            addTask () {
+            addTask() {
                 this.tasks.push({name : this.newTaskName, complete : false});
+                this.newTaskName = '';
+                this.setTaskList();          
+            },
+            setPage(value) {
+                this.selectCompleted = value;
+                this.setTaskList();
+            },
+            setTaskList() {               
+                this.taskList = this.tasks.filter( (item) => { return item.complete == this.selectCompleted} );
             }
+
         }
     };
 </script>
@@ -63,5 +83,8 @@
             list-style: none;
             padding: 0;
         }
+        .complete { 
+            text-decoration: line-through;
+        }    
     }
 </style>
