@@ -8,7 +8,7 @@
         <ul class="tasks">
             <li v-for="task in taskList" :class="{complete : task.complete}">
                 <label>
-                    <input type="checkbox" v-model="task.complete" v-on:change = "setTaskList()" />
+                    <input type="checkbox" v-model="task.complete" v-on:change="setTaskList()" />
                     {{task.name}}
                 </label>
             </li>
@@ -45,6 +45,10 @@
             }
         },
 
+        created() {
+            this.setTaskList(); 
+        },
+
         methods : {
             addTask() {
                 this.tasks.push({name : this.newTaskName, complete : false});
@@ -79,5 +83,8 @@
             list-style: none;
             padding: 0;
         }
+        .complete { 
+            text-decoration: line-through;
+        }    
     }
 </style>
