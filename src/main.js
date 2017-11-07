@@ -6,6 +6,7 @@ import router from './router';
 
 // import 'material-design-icons/iconfont/material-icons.css';
 
+import { store } from './store/store'
 import KeenUI from 'keen-ui';
 import 'keen-ui/dist/keen-ui.css';
 
@@ -13,8 +14,9 @@ Vue.use(KeenUI);
 
 /* eslint-disable no-new */
 new Vue({
-  el         : '#app',
-  router,
-  template   : '<App/>',
-  components : {App}
+    el         : '#app',
+    router,
+    store,
+    template   : '<App/>',
+    components : {App}
 });
