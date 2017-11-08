@@ -3,18 +3,20 @@
 import Vue from 'vue';
 import App from './app';
 import router from './router';
+import store from './store/store'
 
 // import 'material-design-icons/iconfont/material-icons.css';
 
 import KeenUI from 'keen-ui';
 import 'keen-ui/dist/keen-ui.css';
 
-Vue.use(KeenUI);
+Vue.use( KeenUI );
 
 /* eslint-disable no-new */
-new Vue({
-  el         : '#app',
-  router,
-  template   : '<App/>',
-  components : {App}
-});
+new Vue( {
+	el: '#app',
+	store,
+	router,
+	template: '<App/>',
+	components: { App }
+} );

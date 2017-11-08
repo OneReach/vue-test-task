@@ -11,6 +11,9 @@
 </script>
 
 <style lang="scss">
+
+    @import "src/assets/scss/base";
+
     html, body {
         height: 100%;
         margin: 0;
