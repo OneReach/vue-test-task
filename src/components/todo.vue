@@ -1,73 +1,134 @@
 <template>
     <div class="todo">
         <h1 class="title">Checklist</h1>
-        <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
-                <label>
-                    <input type="checkbox" v-model="task.complete" />
-                    {{task.name}}
-                </label>
-            </li>
-        </ul>
+        <ui-tabs class="">
+          <ui-tab v-for="tab in tabs" :title="tab.label">
+            <transition-group tag="ul" class="tasks" name="tasks">
+              <task
+                v-for="task in tasks"
+                v-show="tab.complete === task.complete"
+                :key="task.name"
+                :task="task"
+                class="task"
+                @change="handleCheck"
+              ></task>
+            </transition-group>
+          </ui-tab>
+        </ui-tabs>
         <form class="control-bar" @submit.prevent="addTask">
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" required v-model="newTaskName"></ui-textbox>
-            <ui-button color="primary" type="submit" icon="add">Add</ui-button>
+            <ui-textbox placeholder="Add an item here'" required v-model="newTaskName"></ui-textbox>
+            <ui-button color="primary" class="circle-button">Add item</ui-button>
         </form>
     </div>
 </template>
 
 <script>
-    export default {
-        data () {
-            return {
-                newTaskName : '',
-                tasks : [
-                    { name : 'create skeleton of todo', complete : true },
-                    { name : 'add ability to add tasks', complete : true },
-                    { name : 'clear task name after clicking "Add"', complete : true },
-                    { name : 'put "Add" button in one line with input', complete : true },
-                    { name : 'add new task by hitting Enter instead of clicking "Add"', complete : true },
-                    { name : 'replace <input> with <ui-checkbox> in tasks list', complete : false },
-                    { name : 'when task is complete cross it out', complete : false },
-                    { name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false },
-                    { name : 'don\'t allow to add empty tasks', complete : true },
-                    { name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false },
-                    { name : 'extract list item into a separate vue.js component', complete : false },
-                    { name : 'persist tasks list in a local storage', complete : false },
-                    { name : 'add animation on task completion', complete : false },
-                ]
-            }
-        },
+  import task from './task'
+  import { createTasksMixin } from '../tasksService'
+  import storage from '../storage'
 
-        methods : {
-            addTask () {
-              this.tasks.push({ name : this.newTaskName, complete : false });
-              this.newTaskName = ''
-            }
+  export default {
+    components: { task },
+    mixins: [createTasksMixin(storage)],
+    data () {
+        return {
+            newTaskName: '',
+            tabs: [{
+              label: 'Pending',
+              complete: false
+            }, {
+              label: 'Completed',
+              complete: true
+            }]
         }
-    };
+    },
+    
+    methods: {
+      addTask () {
+        this.add(this.newTaskName)
+        this.newTaskName = ''
+      },
+      
+      handleCheck () {
+        this.sync()
+      }
+    }
+  };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     .todo {
         margin: auto;
         background: #fff;
         padding: 20px;
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
+        min-width: 690px;
 
         .title {
             margin-top: 0;
+        }
+        
+        .circle-button {
+          border-radius: 18px;
         }
 
         .tasks {
             list-style: none;
             padding: 0;
+            max-height: 300px;
+            overflow-y: auto;
+            overflow-x: auto;
+
+            .task {
+              position: relative;
+              z-index: 100;
+            }
+
+            &-enter-active, &-leave-active {
+              transition: all .5s;
+            }
+            
+            &-enter {
+              transform: translateY(100px) translateX(-30px);
+            }
+            
+            &-leave {
+              height: 21px;
+            }
+            
+            &-leave-to {
+              height: 0;
+              transform: scaleY(0);
+            }
         }
-    }
-    
-    .control-bar {
-      display: flex;
-      justify-content: space-between;
+        
+        .control-bar {
+          display: flex;
+          justify-content: space-between;
+        }
+
+        .ui-tabs__header {
+          background-color: #fff !important;
+          .ui-tabs__active-tab-indicator {
+            display: none;
+          }
+          
+          .ui-tabs__header-items {
+            display: flex;
+            justify-content: flex-start;
+
+            .ui-tab-header-item {
+              border-radius: 20px !important;
+              color: rgba(0, 0, 0, 0.54) !important;
+              width: 150px;
+              margin: 10px;
+              
+              &.is-active {
+                background-color: #eeeeee !important;
+              }
+            }
+          }
+        }
     }
 </style>
