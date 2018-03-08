@@ -1,48 +1,54 @@
+
 <template>
     <div class="todo">
         <h1 class="title">Checklist</h1>
-        <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
-                <label>
-                    <input type="checkbox" v-model="task.complete" />
-                    {{task.name}}
-                </label>
-            </li>
-        </ul>
-        <div>
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
-            <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
+         <ui-tabs>
+                <ui-tab title="Pending">
+                    <div class="tasks">
+                        <transition-group name='fadeOut' tag="div">
+                            <todo-item  v-for="(task,index) in tasks" @click.native="saveTasks" v-if="!task.complete" :key="index" :task="task"></todo-item>
+                        </transition-group>
+                    </div>
+                </ui-tab>
+                <ui-tab title="Complete">
+                    <div class="tasks">
+                        <transition-group name='fadeOut' tag="div">
+                                <todo-item  v-for="(task,index) in tasks" @click.native="saveTasks" v-if="task.complete" :key="index" :task="task"></todo-item>
+                        </transition-group>
+                    </div>
+                </ui-tab>
+            </ui-tabs>
+        <div class="new-task__form" @keyup.enter="addTask">   
+            <ui-textbox class="new-task__form__field" placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
+            <ui-button class="new-task__form__btn" color="primary"  @click="addTask" icon="add">Add</ui-button>
         </div>
     </div>
 </template>
 
 <script>
+    import todoItem from './todo-item.vue';
+    const todos = JSON.parse(window.localStorage.getItem('todos'))||[];
     export default {
         data () {
             return {
                 newTaskName : '',
-                tasks : [
-                    {name : 'create skeleton of todo', complete : true},
-                    {name : 'add ability to add tasks', complete : true},
-                    {name : 'clear task name after clicking "Add"', complete : false},
-                    {name : 'put "Add" button in one line with input', complete : false},
-                    {name : 'add new task by hitting Enter instead of clicking "Add"', complete : false},
-                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : false},
-                    {name : 'when task is complete cross it out', complete : false},
-                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
-                    {name : 'don\'t allow to add empty tasks', complete : false},
-                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
-                    {name : 'extract list item into a separate vue.js component', complete : false},
-                    {name : 'persist tasks list in a local storage', complete : false},
-                    {name : 'add animation on task completion', complete : false},
-                ]
+                tasks : todos
             }
         },
 
         methods : {
             addTask () {
+                if (this.newTaskName==='')return;
                 this.tasks.push({name : this.newTaskName, complete : false});
+                this.saveTasks();
+                this.newTaskName='';
+            },
+            saveTasks(){
+                window.localStorage.setItem('todos',JSON.stringify(this.tasks));
             }
+        },
+        components:{
+            todoItem
         }
     };
 </script>
@@ -60,8 +66,24 @@
         }
 
         .tasks {
-            list-style: none;
-            padding: 0;
+            overflow-y: auto; 
+            max-height: 300px;
+        }
+        .new-task__form{
+            display: flex;
+            &__field{
+                flex-grow: 1;
+            }
         }
     }
+    //          Animations 
+    .fadeOut-enter-active , .fadeOut-leave-active {
+        transition: all .5s cubic-bezier(1.0, 0.5, 0.8, 1.0);
+    }
+    
+    .fadeOut-enter, .fadeOut-leave-to{
+        transform: translateY(-10px);
+        opacity: 0; 
+    }
+    
 </style>
