@@ -9,7 +9,7 @@
                 </label>
             </li>
         </ul>
-        <div>
+        <div class="form-wrap">
             <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
             <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
         </div>
@@ -63,6 +63,12 @@
         .tasks {
             list-style: none;
             padding: 0;
+        }
+
+        .form-wrap {
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
         }
     }
 </style>
