@@ -5,13 +5,13 @@
         <ui-tabs fullwidth>
             <ui-tab id="pending-tab" title="Pending">
                 <ul class="tasks">
-                    <list-item v-for="task in tasks" :task="task" :tasks="tasks" />
+                    <list-item v-for="task in tasks" :task="task" :tasks="tasks" v-show="!task.complete" />
                 </ul>
             </ui-tab>
 
             <ui-tab id="complete-tab" title="Complete">
                 <ul class="tasks">
-                    <list-item v-for="task in tasks" :task="task" :tasks="tasks" />
+                    <list-item v-for="task in tasks" :task="task" :tasks="tasks" v-show="task.complete" />
                 </ul>
             </ui-tab>
         </ui-tabs>
@@ -104,18 +104,6 @@
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-        }
-
-        #pending-tab li.complete {
-            display: none;
-        }
-
-        #complete-tab li {
-            display: none;
-
-            &.complete {
-                display: block;
-            }
         }
     }
 </style>
