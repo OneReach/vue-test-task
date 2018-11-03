@@ -56,8 +56,10 @@
 
         methods : {
             addTask () {
-                this.tasks.push({name : this.newTaskName, complete : false});
-                this.newTaskName = '';
+                if (this.newTaskName !== '') {
+                    this.tasks.push({name : this.newTaskName, complete : false});
+                    this.newTaskName = '';
+                }
             }
         },
 
