@@ -3,9 +3,9 @@
         <h1 class="title">Checklist</h1>
         <ul class="tasks">
             <li v-for="task in tasks" :class="{complete : task.complete}">
-                <label>
-                    <ui-checkbox type="checkbox" v-model="task.complete">{{task.name}}</ui-checkbox>
-                </label>
+                <ui-checkbox type="checkbox" v-model="task.complete">
+                    <span>{{task.name}}</span>
+                </ui-checkbox>
             </li>
         </ul>
         <div class="form-wrap">
@@ -26,8 +26,8 @@
                     {name : 'clear task name after clicking "Add"', complete : true},
                     {name : 'put "Add" button in one line with input', complete : true},
                     {name : 'add new task by hitting Enter instead of clicking "Add"', complete : true},
-                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : false},
-                    {name : 'when task is complete cross it out', complete : false},
+                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : true},
+                    {name : 'when task is complete cross it out', complete : true},
                     {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
                     {name : 'don\'t allow to add empty tasks', complete : false},
                     {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
@@ -77,5 +77,10 @@
             flex-direction: row;
             justify-content: space-between;
         }
+
+        li.complete span {
+            text-decoration: line-through;
+        }
+        
     }
 </style>
