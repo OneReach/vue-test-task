@@ -5,21 +5,13 @@
         <ui-tabs fullwidth>
             <ui-tab id="pending-tab" title="Pending">
                 <ul class="tasks">
-                    <li v-for="task in tasks" :class="{complete : task.complete}">
-                        <ui-checkbox type="checkbox" v-model="task.complete">
-                            <span>{{task.name}}</span>
-                        </ui-checkbox>
-                    </li>
+                    <list-item v-for="task in tasks" :task="task" />
                 </ul>
             </ui-tab>
 
             <ui-tab id="complete-tab" title="Complete">
                 <ul class="tasks">
-                    <li v-for="task in tasks" :class="{complete : task.complete}">
-                        <ui-checkbox type="checkbox" v-model="task.complete">
-                            <span>{{task.name}}</span>
-                        </ui-checkbox>
-                    </li>
+                    <list-item v-for="task in tasks" :task="task" />
                 </ul>
             </ui-tab>
         </ui-tabs>
@@ -32,6 +24,8 @@
 </template>
 
 <script>
+    import ListItem from './list-item.vue'
+
     export default {
         data () {
             return {
@@ -52,6 +46,10 @@
                     {name : 'add animation on task completion', complete : false},
                 ]
             }
+        },
+
+        components : {
+            ListItem
         },
 
         methods : {
@@ -87,18 +85,16 @@
         }
 
         .tasks {
-            list-style: none;
+            height: 300px;
             padding: 0;
+            overflow-y: auto;
+            list-style: none;
         }
 
         .form-wrap {
             display: flex;
             flex-direction: row;
             justify-content: space-between;
-        }
-
-        li.complete span {
-            text-decoration: line-through;
         }
 
         #pending-tab li.complete {
@@ -111,11 +107,6 @@
             &.complete {
                 display: block;
             }
-        }
-        
-        .tasks {
-            height: 300px;
-            overflow-y: auto;
         }
     }
 </style>
