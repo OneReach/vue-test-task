@@ -10,7 +10,7 @@
             </li>
         </ul>
         <div class="form-wrap">
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
+            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName" ></ui-textbox>
             <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
         </div>
     </div>
@@ -44,6 +44,14 @@
                 this.tasks.push({name : this.newTaskName, complete : false});
                 this.newTaskName = '';
             }
+        },
+
+        mounted() {
+            window.addEventListener('keyup', event => {
+                if (event.keyCode === 13) {
+                    this.addTask();
+                }
+            });
         }
     };
 </script>
