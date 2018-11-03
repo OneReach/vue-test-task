@@ -5,13 +5,13 @@
         <ui-tabs fullwidth>
             <ui-tab id="pending-tab" title="Pending">
                 <ul class="tasks">
-                    <list-item v-for="task in tasks" :task="task" />
+                    <list-item v-for="task in tasks" :task="task" :tasks="tasks" />
                 </ul>
             </ui-tab>
 
             <ui-tab id="complete-tab" title="Complete">
                 <ul class="tasks">
-                    <list-item v-for="task in tasks" :task="task" />
+                    <list-item v-for="task in tasks" :task="task" :tasks="tasks" />
                 </ul>
             </ui-tab>
         </ui-tabs>
@@ -56,12 +56,21 @@
             addTask () {
                 if (this.newTaskName !== '') {
                     this.tasks.push({name : this.newTaskName, complete : false});
+                    localStorage.setItem(STORAGE_KEY, JSON.stringify(this.tasks));
                     this.newTaskName = '';
                 }
             }
         },
 
-        mounted() {
+        created () {
+            window.STORAGE_KEY = 'todo-storage';
+
+            if (localStorage.getItem(STORAGE_KEY) !== null) {
+                this.tasks = JSON.parse(localStorage.getItem(STORAGE_KEY))
+            }
+        },
+
+        mounted () {
             window.addEventListener('keyup', event => {
                 if (event.keyCode === 13) {
                     this.addTask();

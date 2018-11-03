@@ -1,6 +1,6 @@
 <template>
     <li :class="{complete : this.task.complete}">
-        <ui-checkbox type="checkbox" v-model="task.complete">
+        <ui-checkbox type="checkbox" v-model="task.complete" @change="changeHandler">
             <span>{{this.task.name}}</span>
         </ui-checkbox>
     </li>
@@ -8,7 +8,14 @@
 
 <script>
 export default {
-    props: ['task']    
+    props: ['task', 'tasks'],
+    
+    methods: {
+        changeHandler () {
+            console.log('Changed');
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(this.tasks));
+        }
+    }
 }
 </script>
 
