@@ -1,0 +1,61 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
+.ui-tabs {
+	&__body {
+		border: none!important;
+		padding: 16px 8px!important;
+	}
+	&__active-tab-indicator {
+		display: none;
+	}
+	&.bounce {
+		.ui-tab-header-item {
+			&:last-of-type {
+				.ui-tab-header-item__text {
+					animation: bounce-in 1s;
+				}
+			}
+		}
+	}
+}
+
+@keyframes bounce-in {
+	0% {
+		transform: rotate(0);
+	}
+	50% {
+		transform: scale(1.15)
+	}
+	100% {
+		transform: scale(1);
+	}
+}
+
+// если вы это читаете, я заранее извиняюсь за эти стили.
+// Я знаю что использование important это плохая практика,
+// и обычно так не делаю, но в условии задания было сказано -
+// сделать по возможности как можно ближе к изображению на гифке.
+// Поэтому я немного поменял keen стили. Если это не обязательно,
+// можно просто удалить этот кусок
+
+.ui-checkbox {
+	margin-bottom: 0!important;
+}
+.ui-tab-header-item {
+	border-radius: 20px;
+	height: 32px!important;
+	&.is-active {
+		background: grey!important;
+		border: none!important;
+		color: #fff!important;
+	}
+}
+.ui-textbox {
+	margin-bottom: 0!important;
+}
+
+//////////////////////////////////////////////////////////////////

@@ -1,0 +1,21 @@
+.todo-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+	&__item {
+		display: flex;
+		margin-bottom: 8px;
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+		&.complete {
+			.todo-list__desc {
+				text-decoration: line-through;
+			}
+		}
+	}
+	&__desc {
+		margin-left: 8px;
+		display: inline-block;
+	}
+}
