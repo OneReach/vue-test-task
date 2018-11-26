@@ -39,7 +39,7 @@
                       this.tasksCompleted.push({name: el.name, complete: true});
                       let stringify = JSON.stringify(this.tasksCompleted);
                       localStorage.setItem('tasksCompleted', stringify);
-	                    this.$emit('complete', this.task);
+	                  this.$emit('complete', this.task);
                   }
               });
           },
@@ -49,6 +49,6 @@
 </script>
 
 <style scoped lang="scss">
-  @import '../assets/scss/buttons';
-  @import '../assets/scss/todo-list';
+    @import '../assets/scss/buttons';
+    @import '../assets/scss/todo-list';
 </style>
