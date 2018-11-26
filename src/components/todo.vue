@@ -1,13 +1,13 @@
 <template>
-		<div class="todo">
+        <div class="todo">
 				<h1 class="todo__title">Checklist</h1>
 				<ui-tabs background-color="clear" :class="{bounce : isComplete}">
 						<ui-tab title="Pending">
 								<div class="todo__inner">
 										<todo-list
-												:tasks="tasksPending"
-                        :tasksCompleted="tasksCompleted"
-                        @complete="completeTask">
+											:tasks="tasksPending"
+                                            :tasksCompleted="tasksCompleted"
+                                            @complete="completeTask">
 										</todo-list>
 								</div>
 								<div class="todo__wrap">
@@ -29,7 +29,6 @@
 								</div>
 						</ui-tab>
 				</ui-tabs>
-
 		</div>
 </template>
 
@@ -43,7 +42,7 @@
 								newTaskName : '',
 								tasksPending : [],
 								tasksCompleted : [
-									  // сейчас наши выполненные таски берутся из localstorage
+                                        // сейчас наши выполненные таски берутся из localstorage
 
 										// {name : 'create skeleton of todo', complete : true},
 										// {name : 'add ability to add tasks', complete : true},
@@ -56,16 +55,16 @@
 										// {name : 'don\'t allow to add empty tasks', complete : true},
 										// {name : 'persist tasks list in a local storage', complete : true},
 										// {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
-                    // {name : 'extract list item into a separate vue.js component', complete : true},
-                    // {name : 'add animation on task completion', complete : true},
-                ]
+                                        // {name : 'extract list item into a separate vue.js component', complete : true},
+                                        // {name : 'add animation on task completion', complete : true}
+                                ]
 						}
 				},
 
 				methods : {
 						addTask() {
 								if(this.newTaskName.length > 0) {
-										this.tasksPending.push({name: this.newTaskName, complete: false});
+								        this.tasksPending.push({name: this.newTaskName, complete: false});
 										let stringify = JSON.stringify(this.tasksPending);
 										localStorage.setItem('tasksPending', stringify);
 								}
@@ -94,16 +93,16 @@
 						}
 				},
 				created() {
-				    this.getTasks();
+                        this.getTasks();
 				}
 		};
 
 </script>
 
 <style scoped lang="scss">
-		@import '../assets/scss/buttons';
-    @import '../assets/scss/todo-list';
-		.todo {
+        @import '../assets/scss/buttons';
+        @import '../assets/scss/todo-list';
+        .todo {
 				margin: auto;
 				background: #fff;
 				padding: 16px 16px 0;
@@ -112,17 +111,17 @@
 				border-radius: 5px;
 				box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
 				&__title {
-						margin: 0 0 16px;
-						font-size: 18px;
+                        margin: 0 0 16px;
+                        font-size: 18px;
 				}
 				&__inner {
-            overflow: hidden;
-            height: 260px;
-            overflow-y: scroll;
-            &--extended {
-                height: 320px;
-            }
-        }
+                        overflow: hidden;
+                        height: 260px;
+                        overflow-y: scroll;
+                        &--extended {
+                            height: 320px;
+                        }
+                }
 				&__wrap {
 						margin-top: 32px;
 						display: flex;
