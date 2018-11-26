@@ -54,6 +54,7 @@
         padding: 20px;
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
+        display: flex;
 
         .title {
             margin-top: 0;
