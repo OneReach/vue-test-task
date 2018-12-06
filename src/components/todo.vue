@@ -1,18 +1,24 @@
 <template>
     <div class="todo">
         <h1 class="title">Checklist</h1>
+        <div>
+            <ui-button>Pending</ui-button>
+            <ui-button type="secondary" @click="removeChecked">Completed</ui-button>
+        </div>
+
         <ul class="tasks">
             <li v-for="task in tasks" :class="{complete : task.complete}">
                 <label>
-                    <input type="checkbox" v-model="task.complete" />
+                    <ui-checkbox color="primary" v-model="task.complete" >
                     {{task.name}}
+                    </ui-checkbox>
                 </label>
             </li>
         </ul>
-        <div>
+        <form class="new-task">
             <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
-            <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
-        </div>
+            <ui-button color="primary" @click="addTask" icon="add">Add item</ui-button>
+        </form>
     </div>
 </template>
 
@@ -41,20 +47,33 @@
 
         methods : {
             addTask () {
-                this.tasks.push({name : this.newTaskName, complete : false});
+                this.newTaskName.length > 0 && this.tasks.push({name : this.newTaskName, complete : false});
+                this.newTaskName = "";
+            },
+            removeChecked(){
+                let newList = this.tasks.filter((item) => !item.complete);  
+                return this.tasks = newList;
             }
         }
+        
     };
 </script>
 
 <style scoped lang="scss">
+    
+        $brand-primary-color: #434343;
+    %btn {
+        color: #c1c2c5;
+        border-radius: 30px;
+        text-transform: none;
+    }
     .todo {
         margin: auto;
         background: #fff;
         padding: 20px;
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
-
+        color: #5e6366;
         .title {
             margin-top: 0;
         }
@@ -62,6 +81,18 @@
         .tasks {
             list-style: none;
             padding: 0;
+            max-height: 200px;
+            overflow: auto;
+            .complete {
+                text-decoration: line-through;
+            }
+        }
+        .new-task {
+            display: flex;
+            justify-content: space-between;
+        }
+        .ui-button {
+            @extend %btn;
         }
     }
 </style>
