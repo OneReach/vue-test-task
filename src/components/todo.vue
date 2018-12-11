@@ -1,32 +1,51 @@
 <template>
     <div class="todo">
         <h1 class="title">Checklist</h1>
-        <div>
-            <ui-button>Pending</ui-button>
-            <ui-button type="secondary" @click="removeChecked">Completed</ui-button>
-        </div>
+        <ui-tabs type="text" 
+                 backgroundColor="clear" 
+                 indicatorColor="white"
+                 textColorActive = "primary">
+            <ui-tab title="Pending">
+                <ul class="tasks"  >
+                   
+                    <item v-for="(task, index) in tasks" 
+                          v-bind:task = "task"
+                          v-bind:index = "index"
+                          v-if = "!task.complete"
+                         v-on:transitionend="this.tasks.splice(index, 1)"
+                          ></item>
+                </ul>
+            </ui-tab>
+            <ui-tab title="Completed" >
+               <ul class="tasks">
+                    <item v-for="task in tasks" 
+                            v-if = "task.complete"
+                          v-bind:task = "task" ></item>
+               </ul>
+            </ui-tab>
+       
+        </ui-tabs>
 
-        <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
-                <label>
-                    <ui-checkbox color="primary" v-model="task.complete" >
-                    {{task.name}}
-                    </ui-checkbox>
-                </label>
-            </li>
-        </ul>
+ 
         <form class="new-task">
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
+            <label for="new-item">Add new task</label>
+            <ui-textbox placeholder="e.g. 'read vue.js guide'" 
+                        v-model="newTaskName"
+                        id ="new-item"
+                        ></ui-textbox>
             <ui-button color="primary" @click="addTask" icon="add">Add item</ui-button>
         </form>
     </div>
 </template>
 
 <script>
+import Item from './listItem.vue';
+
     export default {
         data () {
             return {
                 newTaskName : '',
+                completedTasks: [],
                 tasks : [
                     {name : 'create skeleton of todo', complete : true},
                     {name : 'add ability to add tasks', complete : true},
@@ -44,36 +63,35 @@
                 ]
             }
         },
-
+       /* mounted() {
+            this.completedTasks = this.tasks.filter((task) => task.complete);
+            this.tasks = this.tasks.filter((task) => !task.complete);
+        },*/
+ 
         methods : {
             addTask () {
                 this.newTaskName.length > 0 && this.tasks.push({name : this.newTaskName, complete : false});
                 this.newTaskName = "";
-            },
-            removeChecked(){
-                let newList = this.tasks.filter((item) => !item.complete);  
-                return this.tasks = newList;
             }
+           
+        },
+        components: {
+            item: Item
         }
         
-    };
+}
 </script>
 
 <style scoped lang="scss">
     
-        $brand-primary-color: #434343;
-    %btn {
-        color: #c1c2c5;
-        border-radius: 30px;
-        text-transform: none;
-    }
+
     .todo {
         margin: auto;
         background: #fff;
         padding: 20px;
         border-radius: 5px;
+        width: 50%;
         box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
-        color: #5e6366;
         .title {
             margin-top: 0;
         }
@@ -81,18 +99,24 @@
         .tasks {
             list-style: none;
             padding: 0;
-            max-height: 200px;
-            overflow: auto;
+            text-decoration: none;
             .complete {
                 text-decoration: line-through;
             }
         }
         .new-task {
             display: flex;
+            flex-wrap: wrap;
             justify-content: space-between;
+            label {
+                width: 100%;
+            }
+
         }
-        .ui-button {
-            @extend %btn;
+        .ui-tab {
+            height: 200px;
+            overflow: auto;
         }
     }
+    
 </style>

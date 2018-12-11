@@ -1,15 +1,40 @@
 <template>
-    <li v-for="task in tasks" :class="{complete : task.complete}">
-        <label>
-            <ui-checkbox color="primary" v-model="task.complete" >
-            {{task.name}}
-            </ui-checkbox>
-        </label>
-    </li>
+    <transition name="cross">
+        <li  :class="{complete : task.complete}">
+            <label>
+                <ui-checkbox color="primary" v-model="task.complete" >
+                {{task.name}}
+                </ui-checkbox>
+            </label>
+        </li>
+    </transition>
 </template>
 
 <script>
+
     export default {
-        
+       
+        props: {
+            task: Object     
+            }
+    
     }
 </script>
+
+<style>
+
+.cross-leave-active {
+  animation: crossing 2s ;
+}
+@keyframes crossing {
+  0% {
+    text-decoration: line-through;
+  }
+  
+  100% {
+    text-decoration: none;
+    opacity: 0;
+  }
+}
+     
+</style>
