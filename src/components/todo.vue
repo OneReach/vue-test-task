@@ -8,19 +8,20 @@
             <ui-tab title="Pending">
                 <ul class="tasks"  >
                    
-                    <item v-for="(task, index) in tasks" 
-                          v-bind:task = "task"
-                          v-bind:index = "index"
-                          v-if = "!task.complete"
-                         v-on:transitionend="this.tasks.splice(index, 1)"
-                          ></item>
+                    <item 
+                        v-for="(task, index) in actualTasks" 
+                        v-bind:task="task"
+                        v-bind:key="task.name"
+                        v-on:transitionend="this.tasks.splice(index, 1)"
+                    />
                 </ul>
             </ui-tab>
             <ui-tab title="Completed" >
                <ul class="tasks">
-                    <item v-for="task in tasks" 
-                            v-if = "task.complete"
-                          v-bind:task = "task" ></item>
+                    <item 
+                        v-for="task in completedTasks" 
+                        v-bind:task="task" 
+                    />
                </ul>
             </ui-tab>
        
@@ -45,7 +46,6 @@ import Item from './listItem.vue';
         data () {
             return {
                 newTaskName : '',
-                completedTasks: [],
                 tasks : [
                     {name : 'create skeleton of todo', complete : true},
                     {name : 'add ability to add tasks', complete : true},
@@ -63,7 +63,14 @@ import Item from './listItem.vue';
                 ]
             }
         },
-  
+        computed : {
+            completedTasks() {
+                return this.tasks.filter((task) => task.complete)
+            },
+            actualTasks() {
+                return this.tasks.filter((task) => !task.complete)
+            }
+        },
         methods : {
             addTask () {
                 this.newTaskName.length > 0 && this.tasks.push({name : this.newTaskName, complete : false});
