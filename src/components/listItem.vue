@@ -24,16 +24,17 @@
 <style>
 
 .cross-leave-active {
-  animation: crossing 2s ;
+  animation: crossing 2s;
 }
+
 @keyframes crossing {
   0% {
-    text-decoration: line-through;
+    text-decoration: none;
   }
   
   100% {
-    text-decoration: none;
-    opacity: 0;
+    text-decoration: line-through;
+  
   }
 }
      
