@@ -1,0 +1,75 @@
+// keen ui reset
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    font-size: 100%;
+}
+
+// keen ui  customized elements 
+.ui-checkbox__checkmark::before {
+    border: 0.1rem solid rgba(0, 0, 0, 0.13) !important;
+}
+
+.ui-checkbox--color-primary.is-checked .ui-checkbox__checkmark::before  {
+    background-color: #ffffff !important;
+    border-color: rgba(0, 0, 0, 0.13) !important;
+}
+
+.ui-checkbox.is-checked .ui-checkbox__checkmark::after {
+    border-bottom: 0.125rem solid #000000 !important;
+    border-right: 0.125rem solid #000000 !important;
+}
+
+.ui-button--type-primary.ui-button--color-default {
+    background-color: #24232361 !important;
+    color: #ffffff !important;
+}
+
+.ui-button {
+    border-radius: 50px !important;
+    text-transform: none !important;
+}
+
+.ui-textbox .ui-textbox__input, .ui-textbox__textarea{
+        border: none  !important;
+}
+
+.ui-textbox.ui-textbox--icon-position-left.is-active.is-touched {
+    border: none  !important;
+    border-color: none !important;
+}
+
+.ui-tabs {
+    height: 413px;
+    overflow: hidden;
+    .ui-tabs__body {
+        padding: 0 !important;
+        border: none !important;
+    }
+    .ui-tabs__header {
+        background-color: #ffffff  !important;
+    }
+    .ui-tabs__active-tab-indicator  {
+        display: none !important;
+    }
+    .ui-tab-header-item {
+        text-transform: none !important;
+        padding: .5rem .7rem !important;
+        width: auto !important;
+        height: auto !important;
+        &:hover {
+            background-color:  #ffffff !important;
+        }
+    }
+    
+}
+
+.ui-tabs--text-color-active-primary .ui-tab-header-item.is-active {
+    color: #ffffff !important;
+    background-color: #808080c7 !important;
+    border-radius: 50px;
+}
