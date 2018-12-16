@@ -63,11 +63,7 @@ import Item from './listItem.vue';
                 ]
             }
         },
-       /* mounted() {
-            this.completedTasks = this.tasks.filter((task) => task.complete);
-            this.tasks = this.tasks.filter((task) => !task.complete);
-        },*/
- 
+  
         methods : {
             addTask () {
                 this.newTaskName.length > 0 && this.tasks.push({name : this.newTaskName, complete : false});
