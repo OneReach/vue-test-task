@@ -8,25 +8,26 @@
             <ui-tab title="Pending">
                 <ul class="tasks"  >
                    
-                    <item 
+                    <todo-item 
                         v-for="(task, index) in actualTasks" 
                         v-bind:task="task"
                         v-bind:key="task.name"
-                        v-on:transitionend="this.tasks.splice(index, 1)"
+                     
                     />
                 </ul>
             </ui-tab>
             <ui-tab title="Completed" >
                <ul class="tasks">
-                    <item 
+                    <todo-item 
                         v-for="task in completedTasks" 
                         v-bind:task="task" 
+                        v-bind:key="task.name"
+                        
                     />
                </ul>
             </ui-tab>
        
         </ui-tabs>
-
  
         <form class="new-task">
             <label for="new-item">Add new task</label>
@@ -40,7 +41,7 @@
 </template>
 
 <script>
-import Item from './listItem.vue';
+import TodoItem from './todoItem.vue';
 
     export default {
         data () {
@@ -65,29 +66,52 @@ import Item from './listItem.vue';
         },
         computed : {
             completedTasks() {
-                return this.tasks.filter((task) => task.complete)
+                return this.tasks.filter((task) => task.complete);
             },
             actualTasks() {
-                return this.tasks.filter((task) => !task.complete)
+                
+                return this.tasks.filter((task) => !task.complete);
             }
+        },
+        created () {
+            if (localStorage.getItem('tasks')) {
+              
+                this.tasks = JSON.parse(localStorage.getItem('tasks'));
+            } else {
+                this.saveTasks();
+                this.tasks = JSON.parse(localStorage.getItem('tasks'));
+
+            }
+        },
+        watch: {
+            tasks: {
+                handler: function (){
+                    this.saveTasks();
+                },
+                deep: true  
+            }   
         },
         methods : {
             addTask () {
-                this.newTaskName.length > 0 && this.tasks.push({name : this.newTaskName, complete : false});
+                let taskName = this.newTaskName.trim();
+                if (taskName) {
+                    this.tasks.push({name : taskName, complete : false});
+                } 
+                this.saveTasks();
                 this.newTaskName = "";
+            },
+            saveTasks() {
+              const parsed = JSON.stringify(this.tasks);
+              localStorage.setItem('tasks', parsed);
             }
-           
         },
         components: {
-            item: Item
+            todoItem: TodoItem
         }
-        
 }
 </script>
 
 <style scoped lang="scss">
-    
-
     .todo {
         margin: auto;
         background: #fff;
