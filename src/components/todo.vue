@@ -79,13 +79,11 @@ import TodoItem from './todoItem.vue';
                 this.tasks = JSON.parse(localStorage.getItem('tasks'));
             } else {
                 this.saveTasks();
-                this.tasks = JSON.parse(localStorage.getItem('tasks'));
-
             }
         },
         watch: {
             tasks: {
-                handler: function (){
+                handler(){
                     this.saveTasks();
                 },
                 deep: true  
