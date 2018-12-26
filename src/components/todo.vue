@@ -1,23 +1,31 @@
 <template>
     <div class="todo">
         <h1 class="title">Checklist</h1>
-        <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
-                <label>
-                    <input type="checkbox" v-model="task.complete" />
-                    {{task.name}}
-                </label>
-            </li>
-        </ul>
+        <ui-tabs type="text" backgroundColor="white">
+            <ui-tab title="Pending">
+                <list :tasks="uncompletedTasks" @complete="complete" />
+            </ui-tab>
+            <ui-tab title="Completed">
+                <list :tasks="completedTasks" @complete="complete" />
+            </ui-tab>
+        </ui-tabs>
         <div>
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
-            <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
+            <form @submit.prevent="addTask" :class="{newTask : true}">
+                <ui-textbox placeholder="Add an item here'" v-model="newTaskName"></ui-textbox>
+                <ui-button type="submit" color="primary">Add item</ui-button>
+            </form>
         </div>
     </div>
 </template>
 
 <script>
+import list from './list.vue';
+import { UiTabs, UiTab } from 'keen-ui';
+
     export default {
+        mounted () {
+            this.tasks = JSON.parse(localStorage.getItem('tasks'));
+        },
         data () {
             return {
                 newTaskName : '',
@@ -38,30 +46,89 @@
                 ]
             }
         },
-
+        components: {
+            list,
+            UiTabs,
+            UiTab
+        },
         methods : {
             addTask () {
-                this.tasks.push({name : this.newTaskName, complete : false});
+                if (this.newTaskName !=''){
+                    this.tasks.push({name : this.newTaskName, complete : false});
+                    this.newTaskName = '';
+                }
+            },
+            complete(task) {
+              task.complete = !task.complete;
+            }
+        },
+        computed : {
+            completedTasks(){
+                return this.tasks.filter(task => task.complete) 
+            },
+            uncompletedTasks(){
+                return this.tasks.filter(task => !task.complete)
+            }
+        },
+        watch : {
+            tasks: {
+                handler(){
+                    localStorage.setItem('tasks', JSON.stringify(this.tasks))
+                },
+                deep: true
             }
         }
+
     };
 </script>
 
-<style scoped lang="scss">
+<style lang="scss">
     .todo {
         margin: auto;
         background: #fff;
         padding: 20px;
         border-radius: 5px;
         box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
-
+        width: 40%;
+        overflow: scroll;
+        font-weight: lighter;
+        text-transform: none;
         .title {
             margin-top: 0;
+            font-weight: lighter;
         }
-
-        .tasks {
-            list-style: none;
-            padding: 0;
+        .newTask{
+            display: flex;
+            .ui-textbox{
+                    flex-grow: 1;
+                }
+                button{
+                background-color: #2196f3;
+                display: inline;
+                color: white;
+                border-radius: 10px;
+                margin-left: 10px;
+                padding: 0 1em;
+                }
+                
         }
+        .ui-tabs__body{
+            border: none;
+        }
+        .ui-tabs__header-items li{
+            margin-right: 10px;
+        }
+        .ui-tab-header-item{
+            border-radius: 20px;
+        }
+        .ui-tabs__header-items .ui-tab-header-item.is-active{
+            color: white;
+            background-color: #00000059;
+            border: none;
+        }
+        .ui-tabs__active-tab-indicator{
+            height: 0;
+        }
+        
     }
 </style>
