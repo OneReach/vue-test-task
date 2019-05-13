@@ -15,7 +15,10 @@
             </ui-checkbox>
             <span
                 class="tasks-list__del"
-                @click="removeTask(task.id)">delete</span>
+                @click="removeTask(task.id)"
+            >
+                delete
+            </span>
         </li>
     </ul>
 
@@ -48,6 +51,26 @@
     .tasks-list {
         list-style: none;
         padding: 0;
+
+        &__del {
+            display: none;
+            cursor: pointer;
+            color: #ff253e;
+            position: absolute;
+            top: 3px;
+            right: 0;
+        }
+
+        &__task {
+            position: relative;
+            padding-right: 60px;
+
+            &:hover {
+                .tasks-list__del {
+                    display: inline;
+                }
+            }
+        }
 
         &__task {
             &--complete {

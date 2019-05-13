@@ -9,6 +9,7 @@
             text-color="black"
             type="text"
             ref="controlTabs"
+            :class="taskCompletionStatus"
         >
             <ui-tab
                 title="Pending"
@@ -81,7 +82,7 @@
                 animationDuration: ANIMATION_DURATION,
                 newTaskName: '',
                 tasks: [],
-                taskStatus: ''
+                taskCompletionStatus: ''
             }
         },
         computed: {
@@ -107,37 +108,54 @@
         methods : {
             addTask () {
                 if (!this.newTaskName) return
-                const newTask = {
+                this.tasks.push(
+                    this.createNewTask()
+                );
+                this.setMovingElParams()
+                this.viewAfterAddingTask()
+
+            },
+            createNewTask() {
+                return {
                     id: `f${(+new Date).toString(16)}`,
                     name : this.newTaskName,
                     complete : false
                 }
-                this.tasks.push(newTask);
-                this.newTaskName = ''
-                this.setMovingElParams()
-                this.$refs.controlTabs.setActiveTab('pending')
-                this.setTasksToLocalStorage(this.tasks)
-                this.scrollToEnd()
             },
             setMovingElParams() {
                 this.$nextTick(()=> {
-                    const {x, y} = this.$refs.tasksList.$el.lastChild.getBoundingClientRect()
-                    this.movingElementStyles = {x, y, opacity: 1}
+                    this.setFinalParamsForMovingEl()
 
                     setTimeout(() => {
-                        const {x, y} = this.$refs.inputText.$el.getBoundingClientRect()
-                        this.movingElementStyles = {x, y, opacity: 0}
+                        this.setInitialParamsForMovingEl()
                     }, this.animationDuration)
                 })
             },
-            setTasksState(currentTaskState) {
-                this.taskStatus = currentTaskState
-                    ? 'pending'
-                    : 'completed'
-                this.setTasksToLocalStorage(this.tasks)
+            setInitialParamsForMovingEl() {
+                const {x, y} = this.$refs.inputText.$el.getBoundingClientRect()
+                this.movingElementStyles = {x, y, opacity: 0}
             },
-            setTasksToLocalStorage(value) {
-                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(value || []))
+            setFinalParamsForMovingEl() {
+                const {x, y} = this.$refs.tasksList.$el.lastChild.getBoundingClientRect()
+                this.movingElementStyles = {x, y, opacity: 1}
+            },
+            viewAfterAddingTask() {
+                this.newTaskName = ''
+                this.$refs.controlTabs.setActiveTab('pending')
+                this.setTasksToLocalStorage()
+                this.scrollToEnd()
+            },
+            setTasksState(currentTaskState) {
+                this.taskCompletionStatus = currentTaskState
+                    ? 'completed'
+                    : 'pending'
+                setTimeout(()=> {
+                    this.taskCompletionStatus = ''
+                }, 300)
+                this.setTasksToLocalStorage()
+            },
+            setTasksToLocalStorage() {
+                localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(this.tasks || []))
             },
             getTasksFromLocalStorage() {
                 const json = localStorage.getItem(LOCAL_STORAGE_KEY) || '[]'
@@ -147,7 +165,7 @@
                 this.tasks = this.tasks.filter(
                     task => task.id !== taskId
                 )
-                this.setTasksToLocalStorage(this.tasks)
+                this.setTasksToLocalStorage()
             },
             scrollToEnd() {
                 const container = this.$el.querySelector('.ui-tabs__body')
@@ -166,8 +184,7 @@
             })
         },
         mounted () {
-            const {x, y} = this.$refs.inputText.$el.getBoundingClientRect()
-            this.movingElementStyles = {x, y, opacity: 0}
+            this.setInitialParamsForMovingEl()
         }
     };
 </script>
@@ -205,12 +222,14 @@
        opacity: var(--task-opacity);
    }
 
-   .pending {
-       .pending-class {
-           .ui-tab-header-item__text {
-               color: red;
-               animation: 3s slideIn;
-           }
-       }
+   .ui-tab-header-item__text {
+       transform: scale(1);
+       transition: tarnsform .3s;
+   }
+
+   .pending li[aria-controls*="pending"] .ui-tab-header-item__text,
+   .completed li[aria-controls*="completed"] .ui-tab-header-item__text {
+      transform: scale(1.2);
+      transition: tarnsform .3s;
    }
 </style>
