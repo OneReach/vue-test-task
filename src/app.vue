@@ -6,7 +6,12 @@
 
 <script>
     export default {
-        name : 'app'
+        name : 'app',
+        methods : {
+            addTask () {
+                this.tasks.push({name : this.newTaskName, complete : false});
+            }
+        }
     }
 </script>
 
