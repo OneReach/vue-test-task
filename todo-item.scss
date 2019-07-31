@@ -1,0 +1,52 @@
+.todo-item {
+  position: relative;
+  list-style-type: none;
+  display: flex;
+  &__text {
+    padding: 0 0 0 10px;
+    &.checked {
+      text-decoration: line-through;
+    }
+  }
+  &__button {
+    background-color: transparent;
+    border: none;
+    margin-left: auto;
+  }
+}
+
+.slide {
+  animation-name: slide;
+  animation-duration: .7s;
+  z-index: 2;
+  .todo-item {
+    &__checkbox {
+      animation-name: slide-check;
+      animation-duration: .7s;
+    }
+  }
+}
+
+@keyframes slide {
+  from {
+    transform: translate(-40px, 50px);
+    opacity: 0;
+  }
+  10% {
+    opacity: 1;
+  }
+
+  to {
+    transform: translate(0,0);
+  }
+}
+
+@keyframes slide-check {
+  from {
+    transform: translate(-10px, -30px);
+  }
+
+  to {
+    transform: translate(0, 0);
+  }
+}

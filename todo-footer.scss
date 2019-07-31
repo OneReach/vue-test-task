@@ -1,0 +1,10 @@
+.todo-footer {
+  display: flex;
+  justify-content: space-between;
+  &__input {
+    width: 150px;
+  }
+  &__button {
+    border-radius: 25px;
+  }
+}
