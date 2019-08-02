@@ -80,3 +80,29 @@
         }
     }
 </style>
+
+<style lang="scss">
+    .ui-checkbox {
+        
+        &__label-text {
+            position: relative;
+
+            &::after {
+                content: '';
+                position: absolute;
+                top: calc(50% + 1px);
+                left: 0%;
+                opacity: 0;
+                display: block;
+                width: 100%;
+                height: 1px;
+                background: #000;
+                transition: opacity 0.3s ease;
+
+                .complete & {
+                    opacity: 1;
+                }
+            }
+        }
+    }
+</style>
