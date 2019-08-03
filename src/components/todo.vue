@@ -33,7 +33,7 @@
                     {id: 6, name : 'when task is complete cross it out', complete : true},
                     {id: 7, name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
                     {id: 8, name : 'don\'t allow to add empty tasks', complete : true},
-                    {id: 9, name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
+                    {id: 9, name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : true},
                     {id: 10, name : 'extract list item into a separate vue.js component', complete : true},
                     {id: 11, name : 'persist tasks list in a local storage', complete : false},
                     {id: 12, name : 'add animation on task completion', complete : false},
@@ -46,6 +46,10 @@
                 if (this.newTaskName !== '') {
                     this.tasks.push({id: this.tasks.length, name : this.newTaskName, complete : false});
                     this.newTaskName = '';
+
+                    // scroll tasks list to the bottom
+                    const tasksHTMLElement = this.$el.querySelector('ul');
+                    setTimeout(() => tasksHTMLElement.scrollTo(0, tasksHTMLElement.scrollHeight), 0);
                 }
             },
 
@@ -58,7 +62,7 @@
 
 <style scoped lang="scss">
     .todo {
-        width: 500px;
+        width: 600px;
         max-width: 100%;
         margin: auto;
         background: #fff;
@@ -68,9 +72,14 @@
 
         .title {
             margin-top: 0;
+            line-height: 1;
         }
 
         .tasks {
+            display: block;
+            overflow-y: scroll;
+            min-height: 200px;
+            max-height: calc(100vh - 2 * 20px - 2.25rem - 2rem - 2 * 0.67 * 2rem - 2 * 50px);
             list-style: none;
             padding: 0;
         }
