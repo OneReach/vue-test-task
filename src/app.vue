@@ -25,6 +25,23 @@
         color: #2c3e50;
         height: 100%;
         display: flex;
+
+        // keen ui common
+        .ui-button {
+            cursor: pointer;
+
+            &__icon:only-child {
+                margin: 0;
+            }
+        }
+        
+        .ui-checkbox__label-text {
+            cursor: default;
+
+            span {
+                cursor: pointer;
+            }
+        }
     }
 
     // keen ui reset
