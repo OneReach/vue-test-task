@@ -1,0 +1,15 @@
+export default [
+        { id: 0, name: 'create skeleton of todo', complete: true },
+        { id: 1, name: 'add ability to add tasks', complete: true },
+        { id: 2, name: 'clear task name after clicking "Add"', complete: true },
+        { id: 3, name: 'put "Add" button in one line with input', complete: true },
+        { id: 4, name: 'add new task by hitting Enter instead of clicking "Add"', complete: true },
+        { id: 5, name: 'replace <input> with <ui-checkbox> in tasks list', complete: true },
+        { id: 6, name: 'when task is complete cross it out', complete: true },
+        { id: 7, name: 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete: true },
+        { id: 8, name: 'don\'t allow to add empty tasks', complete: true },
+        { id: 9, name: 'make list of tasks scrollable, if there\'re are a lot of tasks', complete: true },
+        { id: 10, name: 'extract list item into a separate vue.js component', complete: true },
+        { id: 11, name: 'persist tasks list in a local storage', complete: true },
+        { id: 12, name: 'add animation on task completion', complete: true },
+    ];
