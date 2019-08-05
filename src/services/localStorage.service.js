@@ -3,10 +3,7 @@ export default {
         return localStorage.hasOwnProperty(key);
     },
     get: function (key) {
-        let todos = JSON.parse(localStorage.getItem(key) || '[]')
-        todos.forEach((todo, index) => todo.id = index);
-        
-        return todos;
+        return JSON.parse(localStorage.getItem(key) || '[]');
     },
     set: function (key, todos) {
         localStorage.setItem(key, JSON.stringify(todos))
