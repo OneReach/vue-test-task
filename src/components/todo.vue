@@ -6,7 +6,7 @@
                  textColorActive="white"
         >
             <ui-tab title="Pending">
-                <ul class="tasks">
+                <ul class="tasks pending-tasks">
                     <transition-group :name="transitionType"
                                       v-on:before-leave="beforeLeave"
                                       v-on:after-leave="afterLeave"
@@ -24,7 +24,7 @@
             </ui-tab>
 
             <ui-tab title="Completed" selected>
-                <ul class="tasks">
+                <ul class="tasks completed-tasks">
                     <transition-group :name="transitionType"
                                       v-on:before-leave="beforeLeave"
                                       v-on:after-leave="afterLeave"
@@ -61,7 +61,7 @@
     import task from './task.vue';
 
     const STORAGE_KEY = 'todos';
-    const TASKS_LIST_HTML_ELEMENT = '.tasks';
+    const TASKS_LIST_HTML_ELEMENT = '.pending-tasks';
 
     export default {
         components: {
