@@ -6,14 +6,14 @@
       <ui-button @click.prevent="filter = 'pending'" type="primary">Pending ({{tasksPending}})</ui-button>
       <ui-button @click.prevent="filter = 'completed'" type="primary" color="green">Completed ({{tasksCompleted}})</ui-button>
     </div>
-    <ul ref="todoTask" class="todo__tasks">
+    <ul ref="todoTask" :class="heightTodo" class="todo__tasks">
       <transition-group name="list" enter-active-class="animated slideInUp" leave-active-class="animated slideOutRight">
-        <li v-for="(task, index) in filterTasks" :key="task.id" class="todo__list" :class="{todo__complete : task.complete}">
+        <li v-for="task in filterTasks" :key="task.id" class="todo__list" :class="{todo__complete : task.complete}">
           <div class="todo__center">
             <ui-checkbox type="checkbox" v-model="task.complete"></ui-checkbox>
             <router-link :filterTasks="filterTasks" class="todo__link" :to="`/task/${task.id}`">{{task.name}}</router-link>
           </div>
-          <ui-fab @click="removeTask(index)" class="todo__checkbox" size="small" icon="clear"></ui-fab>
+          <ui-fab @click="removeTask(task)" class="todo__checkbox" size="small" icon="clear"></ui-fab>
         </li>
       </transition-group>
     </ul>
@@ -61,6 +61,13 @@ export default {
     },
     tasksCompleted() {
       return this.filters.completed(this.tasks).length
+    },
+    heightTodo() {
+      if (this.tasks.length > 6) {
+        return {
+          'scroll-active': true
+        }
+      }
     }
   },
   methods: {
@@ -74,17 +81,11 @@ export default {
           complete: false
         });
         this.error = false;
-        this.newTaskName = '';
-        if (this.$refs.todoTask.clientHeight >= 400) {
-          this.$refs.todoTask.classList.add('scroll-active')
-        }
+        this.newTaskName = ''
       }
     },
-    removeTask(index) {
-      this.$delete(this.tasks, index);
-      if (this.$refs.todoTask.clientHeight <= 400) {
-        this.$refs.todoTask.classList.remove('scroll-active')
-      }
+    removeTask(task) {
+      this.tasks.splice(this.tasks.indexOf(task), 1)
     }
   },
   watch: {
@@ -98,13 +99,6 @@ export default {
     if (localStorage.getItem('tasks')) {
       this.tasks = JSON.parse(localStorage.getItem('tasks'));
     };
-    this.$nextTick(() => {
-      if (this.$refs.todoTask.clientHeight >= 400) {
-        this.$refs.todoTask.classList.add('scroll-active')
-      } else {
-        this.$refs.todoTask.classList.remove('scroll-active')
-      }
-    });
     this.$store.commit('loadTasks', this.tasks)
   }
 };
