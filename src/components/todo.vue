@@ -58,13 +58,16 @@
           {name: 'persist tasks list in a local storage', complete: true},
           {name: 'add animation on task completion', complete: false},
           {name: 'check me please :)', complete: false}
-        ],
-        storage: ['tasks']
+        ]
       }
     },
-    mounted() {
+    mounted () {
       if (localStorage.tasks) {
-        this.storage.forEach(data => this.checkStorage(data))
+        try {
+          this.tasks = JSON.parse(localStorage.getItem('tasks'))
+        } catch (e) {
+          localStorage.removeItem('tasks')
+        }
       }
     },
     methods: {
@@ -80,17 +83,8 @@
           ? 'Completed'
           : 'Pending'
       },
-      checkStorage(key) {
-        if (localStorage.getItem(key)) {
-          try {
-            this[key] = JSON.parse(localStorage.getItem(key))
-          } catch (e) {
-            localStorage.removeItem(key)
-          }
-        }
-      },
-      saveToStorage() {
-        this.storage.forEach(data => localStorage.setItem(data, JSON.stringify(this[data])))
+      saveToStorage () {
+        localStorage.setItem('tasks', JSON.stringify(this.tasks))
       }
     },
     computed: {

@@ -14,7 +14,7 @@
       }
     },
     methods: {
-      saveStatus() {
+      saveStatus () {
         this.$emit('savedStatus', {
           name: this.task.name,
           complete: this.task.complete
