@@ -3,16 +3,20 @@
     <h1 class="title">Checklist</h1>
     <ui-tabs>
       <ui-tab
-        :key="tab.title"
-        :selected="tab.title === 'Pending'"
-        :title="tab.title"
         v-for="tab in tabs"
+        :key="tab.title"
+        :title="tab.title"
+        :selected="tab.title === 'Pending'"
         @deselect="switchTab(tab.title)"
       >
         <ul class="tasks">
-          <li v-for="(task, index) in tasksFiltered" :key="index" :class="{complete : task.complete}">
-            <ui-checkbox v-model="task.complete" color="clear">{{task.name}}</ui-checkbox>
-          </li>
+          <todoItem
+            v-for="(task, index) in tasksFiltered"
+            :task="task"
+            :key="index"
+            :class="{complete : task.complete}"
+            @savedStatus="saveToStorage"
+          />
         </ul>
       </ui-tab>
     </ui-tabs>
@@ -24,7 +28,13 @@
 </template>
 
 <script>
+  import todoItem from './todoItem'
+
   export default {
+    name: 'todo',
+    components: {
+      todoItem
+    },
     data () {
       return {
         newTaskName: '',
@@ -44,27 +54,45 @@
           {name: 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete: true},
           {name: 'don\'t allow to add empty tasks', complete: true},
           {name: 'make list of tasks scrollable, if there\'re are a lot of tasks', complete: true},
-          {name: 'extract list item into a separate vue.js component', complete: false},
-          {name: 'persist tasks list in a local storage', complete: false},
+          {name: 'extract list item into a separate vue.js component', complete: true},
+          {name: 'persist tasks list in a local storage', complete: true},
           {name: 'add animation on task completion', complete: false},
           {name: 'check me please :)', complete: false}
-        ]
+        ],
+        storage: ['tasks']
+      }
+    },
+    mounted() {
+      if (localStorage.tasks) {
+        this.storage.forEach(data => this.checkStorage(data))
       }
     },
     methods: {
       addTask () {
         if (!this.newTaskName.trim()) return
 
-        this.tasks.push({name : this.newTaskName, complete : false})
+        this.tasks.push({name: this.newTaskName.trim(), complete: false})
+        this.saveToStorage()
         this.newTaskName = ''
       },
       switchTab (tab) {
         this.activeTab = tab === 'Pending'
           ? 'Completed'
           : 'Pending'
+      },
+      checkStorage(key) {
+        if (localStorage.getItem(key)) {
+          try {
+            this[key] = JSON.parse(localStorage.getItem(key))
+          } catch (e) {
+            localStorage.removeItem(key)
+          }
+        }
+      },
+      saveToStorage() {
+        this.storage.forEach(data => localStorage.setItem(data, JSON.stringify(this[data])))
       }
     },
-
     computed: {
       tasksFiltered () {
         return this.activeTab === 'Pending'
@@ -92,10 +120,6 @@
       margin: 0;
       padding: 15px 0 10px;
       list-style: none;
-
-      .complete {
-        text-decoration: line-through;
-      }
     }
 
     .add-task-controls {
@@ -170,11 +194,6 @@
         color: #aaa;
         transition: color .15s;
       }
-    }
-
-    .ui-checkbox__checkmark::after {
-      border-bottom-color: #333 !important;
-      border-right-color: #333 !important;
     }
 
     .ui-textbox {
