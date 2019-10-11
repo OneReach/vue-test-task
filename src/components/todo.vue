@@ -7,16 +7,19 @@
         :key="tab.title"
         :title="tab.title"
         :selected="tab.title === 'Pending'"
+        :class="activeTab"
         @deselect="switchTab(tab.title)"
       >
         <ul class="tasks">
-          <todoItem
-            v-for="(task, index) in tasksFiltered"
-            :task="task"
-            :key="index"
-            :class="{complete : task.complete}"
-            @savedStatus="saveToStorage"
-          />
+          <transition-group name="fade">
+            <todoItem
+              v-for="task in tasksFiltered"
+              :task="task"
+              :key="task.id"
+              :class="{complete : task.complete}"
+              @savedStatus="saveToStorage"
+            />
+          </transition-group>
         </ul>
       </ui-tab>
     </ui-tabs>
@@ -37,6 +40,7 @@
     },
     data () {
       return {
+        id: 0,
         newTaskName: '',
         activeTab: 'Pending',
         tabs: [
@@ -44,39 +48,46 @@
           {title: 'Completed'}
         ],
         tasks: [
-          {name: 'create skeleton of todo', complete: true},
-          {name: 'add ability to add tasks', complete: true},
-          {name: 'clear task name after clicking "Add"', complete: true},
-          {name: 'put "Add" button in one line with input', complete: true},
-          {name: 'add new task by hitting Enter instead of clicking "Add"', complete: true},
-          {name: 'replace <input> with <ui-checkbox> in tasks list', complete: true},
-          {name: 'when task is complete cross it out', complete: true},
-          {name: 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete: true},
-          {name: 'don\'t allow to add empty tasks', complete: true},
-          {name: 'make list of tasks scrollable, if there\'re are a lot of tasks', complete: true},
-          {name: 'extract list item into a separate vue.js component', complete: true},
-          {name: 'persist tasks list in a local storage', complete: true},
-          {name: 'add animation on task completion', complete: false},
-          {name: 'check me please :)', complete: false}
+          {id: 0, name: 'create skeleton of todo', complete: true},
+          {id: 1, name: 'add ability to add tasks', complete: true},
+          {id: 2, name: 'clear task name after clicking "Add"', complete: true},
+          {id: 3, name: 'put "Add" button in one line with input', complete: true},
+          {id: 4, name: 'add new task by hitting Enter instead of clicking "Add"', complete: true},
+          {id: 5, name: 'replace <input> with <ui-checkbox> in tasks list', complete: true},
+          {id: 6, name: 'when task is complete cross it out', complete: true},
+          {id: 7, name: 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete: true},
+          {id: 8, name: 'don\'t allow to add empty tasks', complete: true},
+          {id: 9, name: 'make list of tasks scrollable, if there\'re are a lot of tasks', complete: true},
+          {id: 10, name: 'extract list item into a separate vue.js component', complete: true},
+          {id: 11, name: 'persist tasks list in a local storage', complete: true},
+          {id: 12, name: 'add animation on task completion', complete: false},
+          {id: 13, name: 'check me please :)', complete: false}
         ]
       }
     },
     mounted () {
-      if (localStorage.tasks) {
+      if (localStorage.getItem('tasks')) {
         try {
           this.tasks = JSON.parse(localStorage.getItem('tasks'))
         } catch (e) {
           localStorage.removeItem('tasks')
         }
       }
+
+      this.id = this.tasks.length
     },
     methods: {
       addTask () {
         if (!this.newTaskName.trim()) return
 
-        this.tasks.push({name: this.newTaskName.trim(), complete: false})
+        this.tasks.push({
+          id: this.id,
+          name: this.newTaskName.trim(),
+          complete: false
+        })
         this.saveToStorage()
         this.newTaskName = ''
+        this.id++
       },
       switchTab (tab) {
         this.activeTab = tab === 'Pending'
@@ -104,7 +115,7 @@
     background: #fff;
     padding: 20px;
     border-radius: 5px;
-    box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
+    box-shadow: 3px 3px 15px rgba(0,0,0,.3);
 
     .title {
       margin-top: 0;
@@ -159,7 +170,6 @@
         border: none;
       }
     }
-      
 
     .ui-tab-header-item {
       height: 2.25rem;
@@ -202,5 +212,40 @@
       text-transform: none;
       border-radius: 20px;
     }
+  }
+  
+  // Tasks transitions
+  .Pending :not(.complete).fade-leave-active,
+  .Completed .complete.fade-leave-active {
+    position: absolute;
+    opacity: 0;
+    transition: opacity .25s .1s, transform .25s .1s;
+  }
+
+  .Pending :not(.complete).fade-leave-active {
+    text-decoration: line-through;
+    transform: scale(0.75);
+    
+    // This block is not working (can't figure out why)
+    .ui-checkbox__checkmark::after {
+      opacity: 1 !important;
+      border-bottom-color: #333 !important;
+      border-right-color: #333 !important;
+    }
+  }
+
+  .Completed .complete.fade-leave-active {
+    text-decoration: none;
+    transform: scale(1.05);
+
+    // But this block works fine
+    .ui-checkbox__checkmark::after {
+      border-bottom-color: #fff !important;
+      border-right-color: #fff !important;
+    }
+  }
+
+  .fade-move {
+    transition: transform .25s .2s;
   }
 </style>

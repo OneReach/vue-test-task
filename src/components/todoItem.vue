@@ -16,6 +16,7 @@
     methods: {
       saveStatus () {
         this.$emit('savedStatus', {
+          id: this.task.id,
           name: this.task.name,
           complete: this.task.complete
         })
