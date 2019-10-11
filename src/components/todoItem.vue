@@ -20,6 +20,8 @@
           name: this.task.name,
           complete: this.task.complete
         })
+
+        this.$emit('triggerTab')
       }
     }
   }

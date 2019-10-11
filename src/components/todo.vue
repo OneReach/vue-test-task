@@ -1,7 +1,7 @@
 <template>
   <div class="todo">
     <h1 class="title">Checklist</h1>
-    <ui-tabs>
+    <ui-tabs :class="{zoom : zoom}">
       <ui-tab
         v-for="tab in tabs"
         :key="tab.title"
@@ -18,6 +18,7 @@
               :key="task.id"
               :class="{complete : task.complete}"
               @savedStatus="saveToStorage"
+              @triggerTab="animateTab"
             />
           </transition-group>
         </ul>
@@ -43,6 +44,7 @@
         id: 0,
         newTaskName: '',
         activeTab: 'Pending',
+        zoom: false,
         tabs: [
           {title: 'Pending'},
           {title: 'Completed'}
@@ -96,6 +98,10 @@
       },
       saveToStorage () {
         localStorage.setItem('tasks', JSON.stringify(this.tasks))
+      },
+      animateTab () {
+        this.zoom = true
+        setTimeout(() => this.zoom = false, 300)
       }
     },
     computed: {
@@ -213,13 +219,24 @@
       border-radius: 20px;
     }
   }
+
+  // Tabs transitions
+  .zoom .ui-tab-header-item:not(.is-active) {
+    animation: zoom .3s ease-in;
+  }
+
+  @keyframes zoom {
+    40% { transform: scale(1.3); }
+  }
   
   // Tasks transitions
   .Pending :not(.complete).fade-leave-active,
   .Completed .complete.fade-leave-active {
     position: absolute;
     opacity: 0;
-    transition: opacity .25s .1s, transform .25s .1s;
+    transition:
+      opacity .25s .15s ease-out,
+      transform .25s .15s ease-out;
   }
 
   .Pending :not(.complete).fade-leave-active {
@@ -246,6 +263,6 @@
   }
 
   .fade-move {
-    transition: transform .25s .2s;
+    transition: transform .15s .3s ease-out;
   }
 </style>
