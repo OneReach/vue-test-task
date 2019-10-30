@@ -1,67 +1,158 @@
 <template>
-    <div class="todo">
-        <h1 class="title">Checklist</h1>
-        <ul class="tasks">
-            <li v-for="task in tasks" :class="{complete : task.complete}">
-                <label>
-                    <input type="checkbox" v-model="task.complete" />
-                    {{task.name}}
-                </label>
-            </li>
-        </ul>
-        <div>
-            <ui-textbox placeholder="e.g. 'read vue.js guide'" v-model="newTaskName"></ui-textbox>
-            <ui-button color="primary" @click="addTask" icon="add">Add</ui-button>
+    <div class="todo__container">
+        <div class="todo__header">
+            <h1 class="todo__title">Checklist</h1>
+            <ui-icon-button has-dropdown color="black" icon="more_vert" :size="size" type="secondary">
+                <div class="todo__dropdown" slot="dropdown">
+                    <p><b>The checklist</b></p>
+                    <p class="todo__dropdown-text">The task manager is here to help you to conquer your goal! Good luck!</p>
+                </div>
+            </ui-icon-button>
+        </div>
+        <div class="tabs">
+            <ui-button @click="changeTab(1)"
+                       v-bind:class="{ 'tabs--active': isPendingTasks, 'tabs__btn': true }"
+                       :color="{'primary': isPendingTasks}"
+            >Pending
+            </ui-button>
+            <ui-button @click="changeTab(2)"
+                       v-bind:class="{ 'tabs--active': !isPendingTasks, 'tabs__btn': true }"
+                       :color="{'primary': !isPendingTasks}"
+            >Completed
+            </ui-button>
+        </div>
+        <div class="tasks__wrapper">
+            <ul class="tasks" v-if="isPendingTasks">
+                <li class="task" v-for="(task, index) in tasks" v-if="!task.complete">
+                    <label>
+                        <ui-checkbox v-model="task.complete">
+                            <span>{{task.name}}</span>
+                        </ui-checkbox>
+                    </label>
+                </li>
+            </ul>
+            <ul class="tasks" v-if="!isPendingTasks">
+                <li class="task" v-for="(task, index) in tasks" v-if="task.complete">
+                    <label>
+                        <ui-checkbox v-model="task.complete">
+                            <span v-bind:class="{ 'task--completed': task.complete }">{{task.name}}</span>
+                        </ui-checkbox>
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <div class="toolbar">
+            <ui-textbox placeholder="Add an item here" v-model="newTaskName" class="toolbar__input"></ui-textbox>
+            <ui-button @click="addTask" color="primary" class="toolbar__btn">Add item</ui-button>
         </div>
     </div>
+
 </template>
 
 <script>
     export default {
-        data () {
+        data() {
             return {
-                newTaskName : '',
-                tasks : [
-                    {name : 'create skeleton of todo', complete : true},
-                    {name : 'add ability to add tasks', complete : true},
-                    {name : 'clear task name after clicking "Add"', complete : false},
-                    {name : 'put "Add" button in one line with input', complete : false},
-                    {name : 'add new task by hitting Enter instead of clicking "Add"', complete : false},
-                    {name : 'replace <input> with <ui-checkbox> in tasks list', complete : false},
-                    {name : 'when task is complete cross it out', complete : false},
-                    {name : 'split tasks into "pending" and "complete" tabs using keen-ui component <ui-tabs>', complete : false},
-                    {name : 'don\'t allow to add empty tasks', complete : false},
-                    {name : 'make list of tasks scrollable, if there\'re are a lot of tasks', complete : false},
-                    {name : 'extract list item into a separate vue.js component', complete : false},
-                    {name : 'persist tasks list in a local storage', complete : false},
-                    {name : 'add animation on task completion', complete : false},
-                ]
+                newTaskName: '',
+                isPendingTasks: true,
+                tasks: []
             }
         },
 
-        methods : {
-            addTask () {
-                this.tasks.push({name : this.newTaskName, complete : false});
+        methods: {
+            addTask() {
+                if (this.newTaskName) {
+                    this.tasks.push({name: this.newTaskName, complete: false})
+                    this.newTaskName = '';
+                }
+            },
+            changeTab(num) {
+                if (num === 1) {
+                    this.isPendingTasks = true;
+                } else {
+                    this.isPendingTasks = false;
+                }
             }
         }
     };
 </script>
 
 <style scoped lang="scss">
+    $active-color: #a7adb1;
+    $text-color: #353535;
+    $items-size: 14px;
+
+    %space-between {
+        display: flex;
+        justify-content: space-between;
+    }
+
+    @mixin button($scale) {
+        border-radius: 50px;
+        transform: scale($scale);
+        cursor: pointer;
+    }
+
     .todo {
-        margin: auto;
-        background: #fff;
-        padding: 20px;
-        border-radius: 5px;
-        box-shadow: rgba(0, 0, 0, 0.3) 3px 3px 15px;
-
-        .title {
-            margin-top: 0;
+        &__container {
+            width: 300px;
+            padding: 20px;
+            align-self: center;
+            background-color: #fff;
+            color: $text-color;
         }
-
-        .tasks {
-            list-style: none;
-            padding: 0;
+        &__header {
+            @extend %space-between;
         }
+        &__title {
+            font-size: $items-size * 2;
+            line-height: 0;
+        }
+        &__dropdown {
+            padding: 10px;
+            &-text {
+                width: 200px;
+            }
+        }
+    }
+
+    .tabs {
+        &__btn {
+            @include button(0.9);
+            color: #d5d5d8;
+        }
+        &--active {
+            background-color: $active-color;
+        }
+    }
+
+    .tasks {
+        padding-left: 15px;
+        list-style: none;
+        &__wrapper {
+            min-height: 130px;
+        }
+    }
+
+    .task {
+        &--completed {
+            text-decoration: line-through;
+        }
+    }
+
+    .toolbar {
+        @extend %space-between;
+        &__input {
+            width: 58%;
+            font-size: $items-size;
+        }
+        &__btn {
+            @include button(0.9);
+        }
+    }
+
+    .ui-checkbox__checkmark {
+        transform: scale(0.8);
     }
 </style>
