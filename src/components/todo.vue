@@ -5,19 +5,20 @@
             <ui-icon-button has-dropdown color="black" icon="more_vert" :size="size" type="secondary">
                 <div class="todo__dropdown" slot="dropdown">
                     <p><b>The checklist</b></p>
-                    <p class="todo__dropdown-text">The task manager is here to help you to conquer your goal! Good luck!</p>
+                    <p class="todo__dropdown-text">The task manager is here to help you to conquer your goal! Good
+                        luck!</p>
                 </div>
             </ui-icon-button>
         </div>
         <div class="tabs">
             <ui-button @click="changeTab(1)"
                        v-bind:class="{ 'tabs--active': isPendingTasks, 'tabs__btn': true }"
-                       :color="{'primary': isPendingTasks}"
+                       color="{primary: isPendingTasks}"
             >Pending
             </ui-button>
             <ui-button @click="changeTab(2)"
                        v-bind:class="{ 'tabs--active': !isPendingTasks, 'tabs__btn': true }"
-                       :color="{'primary': !isPendingTasks}"
+                      color="{primary: !isPendingTasks}"
             >Completed
             </ui-button>
         </div>
@@ -32,16 +33,15 @@
                 </li>
             </ul>
             <ul class="tasks" v-if="!isPendingTasks">
-                <li class="task" v-for="(task, index) in tasks" v-if="task.complete">
+                <li class="task" v-for="(task, index) in tasks" v-if="task.complete" :key="index">
                     <label>
                         <ui-checkbox v-model="task.complete">
-                            <span v-bind:class="{ 'task--completed': task.complete }">{{task.name}}</span>
+                            <span v-bind:class="{ 'task--completed': task.complete }" :key="index">{{task.name}}</span>
                         </ui-checkbox>
                     </label>
                 </li>
             </ul>
         </div>
-
         <div class="toolbar">
             <ui-textbox placeholder="Add an item here" v-model="newTaskName" class="toolbar__input"></ui-textbox>
             <ui-button @click="addTask" color="primary" class="toolbar__btn">Add item</ui-button>
@@ -54,6 +54,7 @@
     export default {
         data() {
             return {
+                size: 'size',
                 newTaskName: '',
                 isPendingTasks: true,
                 tasks: []
@@ -102,15 +103,19 @@
             background-color: #fff;
             color: $text-color;
         }
+
         &__header {
             @extend %space-between;
         }
+
         &__title {
             font-size: $items-size * 2;
             line-height: 0;
         }
+
         &__dropdown {
             padding: 10px;
+
             &-text {
                 width: 200px;
             }
@@ -122,6 +127,7 @@
             @include button(0.9);
             color: #d5d5d8;
         }
+
         &--active {
             background-color: $active-color;
         }
@@ -130,6 +136,7 @@
     .tasks {
         padding-left: 15px;
         list-style: none;
+
         &__wrapper {
             min-height: 130px;
         }
@@ -143,10 +150,12 @@
 
     .toolbar {
         @extend %space-between;
+
         &__input {
             width: 58%;
             font-size: $items-size;
         }
+
         &__btn {
             @include button(0.9);
         }
